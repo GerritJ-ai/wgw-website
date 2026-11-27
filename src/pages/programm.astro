@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import bild1 from '../assets/bilder/programm-grundsaetze.webp';
+import bild2 from '../assets/bilder/programm-familie.webp';
+import bild3 from '../assets/bilder/programm-umwelt.webp';
+import { u } from '../lib/site';
+
+const kapitel = [
+  {
+    id: 'grundsaetzliches', nr: '01', titel: 'Grundsätzliches', bild: bild1,
+    unter: 'Unsere Prinzipien – unmissverständlich und unverwechselbar',
+    intro: 'Die WGW ist ein Zusammenschluss von Bürgerinnen und Bürgern, die neutral und unabhängig von herkömmlichen Parteien handeln und entscheiden – und die den Sinn ihres Lebens nicht ausschließlich in der Politik suchen, sondern auch in ihren Familien, in den Vereinen und Organisationen unserer Gemeinde verwurzelt sind.',
+    punkte: [
+      'Die WGW ist unabhängig und arbeitet ohne Fraktionszwang.',
+      'Die WGW ist keiner Ideologie verpflichtet. Wir verstehen es als unsere Aufgabe, gemeindepolitische Sachfragen im Interesse unserer Bürgerinnen und Bürger zu verhandeln.',
+      'Die WGW wünscht sich eine intensive Bürgerbeteiligung.',
+      'Die WGW richtet ihre Arbeit immer am Wohl der Gemeinde aus.',
+      'Die WGW arbeitet konstruktiv mit Sachverstand, mit kritischem Blick für das Notwendige sowie Machbare und vor allem ehrlich im Umgang mit den anderen Fraktionen innerhalb des Gemeinderates.',
+    ],
+  },
+  {
+    id: 'familie', nr: '02', titel: 'Familie und Vereine', bild: bild2,
+    unter: 'Die Familie und unsere Kinder sind unsere Zukunft – unsere Vereine sind das Herz unseres Dorfes',
+    intro: 'Aus diesem Grund wollen wir bisher Erreichtes weiterhin fördern.',
+    punkte: [
+      'Damit Witzwort weiterhin für junge Familien attraktiv bleibt, liegt uns die Förderung unserer Schule und der Kindertagesstätte sehr am Herzen.',
+      'Wir setzen uns weiterhin für bezahlbare Bauplätze für junge Familien ein.',
+      'Vorantreiben des Internetausbaus.',
+      'Die Sicherung unseres Schulstandortes ist für uns nach wie vor elementar.',
+      'Unterstützung der Witzworter Vereine und Organisationen – mit Augenmerk auf deren Jugendarbeit, die mit tollen Aktionen und Veranstaltungen im geselligen und sportlichen Bereich entscheidend zum Wohlfühlfaktor einer Kommune beiträgt.',
+      'Infrastrukturelle Maßnahmen für die Erhaltung von Freizeitgestaltungen unserer Kinder und Jugendlichen (wie z. B. Bolzplätze, Spielplätze und weiteres).',
+      'Auch die Grund- und Nahversorgung ist ein entscheidender Faktor für die Attraktivität unseres Dorfes. Daher sehen wir es als unseren Auftrag, uns für die Erhaltung des Edeka-Marktes im Ort einzusetzen.',
+      'Zu einer lebenswerten Gemeinde gehört für uns außerdem die Förderung der Freiwilligen Feuerwehr sowie unserer örtlichen Vereine.',
+    ],
+  },
+  {
+    id: 'umwelt', nr: '03', titel: 'Umwelt und Zukunft', bild: bild3,
+    unter: 'Die Nachhaltigkeit unserer Natur erhalten und schützen – sicher in die Zukunft: für Witzwort neue Wege gehen',
+    intro: '',
+    punkte: [
+      'Pflege unserer Straßen und Wege, da diese als Spazier- und Fahrradwanderwege von unseren Bürgern und Touristen geschätzt werden. Dieses muss fortgesetzt und intensiviert werden.',
+      'Die Sauberkeit der öffentlichen Anlagen und Plätze unseres Dorfes ist ein Aushängeschild für unsere Gemeinde.',
+      'Unser Ziel ist es, Witzwort stetig weiterzuentwickeln. Wir wünschen uns, dass unsere Gemeinde weiterwachsen kann und für mehr Familien ein Zuhause wird. Darum setzen wir uns für ein weiteres Neubaugebiet ein.',
+      'Für ein zukunftsorientiertes Witzwort liegt uns auch die Förderung der Gewerbetreibenden am Herzen. Bei der Erschließung dieses Neubaugebietes möchten wir deshalb bei ausreichender Nachfrage auch Flächen für Gewerbebetriebe anbieten.',
+      'Da die Meierei für uns im Ort ein wichtiger Arbeitgeber ist, unterstützen wir die Erweiterungspläne und werden sie im Sinne des Dorfes begleiten.',
+      'Die Energieversorgung der Zukunft bereitet aktuell vielen Menschen Sorgen. Daher möchten wir in Kooperation mit Fachfirmen ein Fernwärmekonzept entwickeln, mit dem die Haushalte im Ort versorgt werden können.',
+    ],
+  },
+];
+---
+
+<Base title="Unser Programm" description="Dafür steht die Wählergemeinschaft Witzwort: unsere Grundsätze, Familie und Vereine, Umwelt und Zukunft.">
+  <Seitenkopf eyebrow="Unser Programm · Update 2023" title="Dafür steht die Wählergemeinschaft Witzwort" lead="Drei Themenfelder, ein Anspruch: konstruktiv, unabhängig und immer am Wohl der Gemeinde ausgerichtet.">
+    <nav class="sprung" aria-label="Themen">
+      {kapitel.map((k) => <a href={`#${k.id}`}>{k.nr} · {k.titel}</a>)}
+    </nav>
+  </Seitenkopf>
+
+  {kapitel.map((k, i) => (
+    <section class:list={['abschnitt', { 'abschnitt--sand': i % 2 === 1 }]} id={k.id}>
+      <div class="wrap kap">
+        <div class="kap__kopf">
+          <span class="kap__nr">{k.nr}</span>
+          <h2>{k.titel}</h2>
+          <p class="kap__unter">{k.unter}</p>
+          <Image src={k.bild} alt="" width={720} height={420} fit="cover" />
+        </div>
+        <div>
+          {k.intro && <p class="lead">{k.intro}</p>}
+          <ul class="liste-haken">
+            {k.punkte.map((p) => <li>{p}</li>)}
+          </ul>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="abschnitt abschnitt--dunkel">
+    <div class="schmal" style="text-align:center">
+      <h2>Anregungen? Sprich uns an.</h2>
+      <p>Die WGW wünscht sich eine intensive Bürgerbeteiligung – wir haben ein offenes Ohr für Sorgen, Nöte und Ideen.</p>
+      <a class="btn" href={u('/team/')}>Zu unseren Ansprechpartnern</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .sprung { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.8rem; }
+  .sprung a { text-decoration: none; font-weight: 600; font-size: 0.95rem; padding: 0.5em 1em; border-radius: 999px; background: #fff; border: 1px solid var(--linie); color: var(--tinte); }
+  .sprung a:hover { border-color: var(--rot); color: var(--rot-dunkel); }
+  section[id] { scroll-margin-top: 4.6rem; }
+  .kap { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 2.5rem clamp(2rem, 6vw, 5rem); align-items: start; }
+  .kap__kopf { position: sticky; top: 6.5rem; }
+  .kap__nr { font-family: var(--kopf); font-weight: 750; font-size: 3.2rem; line-height: 1; color: var(--rot); display: block; margin-bottom: 0.8rem; }
+  .kap__unter { font-weight: 600; color: var(--tinte); }
+  .kap__kopf :global(img) { border-radius: var(--radius); margin-top: 1.4rem; width: 100%; }
+  .liste-haken { gap: 1.1rem; }
+  .lead { margin-bottom: 1.6rem; }
+  @media (max-width: 820px) { .kap { grid-template-columns: 1fr; } .kap__kopf { position: static; } }
+</style>

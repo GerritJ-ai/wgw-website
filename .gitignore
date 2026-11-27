@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.astro/
+_jimdo-export/
+logs/
+.env
+public/instagram/*
+!public/instagram/.gitkeep

@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { u, datum } from '../lib/site';
+interface Props { bericht: CollectionEntry<'berichte'> }
+const { bericht } = Astro.props;
+const { title, date, bereich, cover, teaser } = bericht.data;
+---
+<article class="bk">
+  <a href={u(`/aktuelles/${bericht.id}/`)} class="bk__link">
+    <div class="bk__bild">
+      {cover ? <Image src={cover} alt="" width={640} height={420} fit="cover" position="top" /> : <div class="bk__leer" aria-hidden="true">WGW</div>}
+    </div>
+    <div class="bk__text">
+      <p class="bk__meta"><span class={`chip chip--${bereich}`}>{bereich === 'verein' ? 'Verein' : 'Fraktion'}</span><time datetime={date.toISOString().slice(0, 10)}>{datum(date)}</time></p>
+      <h3>{title}</h3>
+      {teaser && <p class="bk__teaser">{teaser}</p>}
+    </div>
+  </a>
+</article>
+<style>
+  .bk { background: #fff; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
+  .bk:hover { box-shadow: var(--schatten); transform: translateY(-2px); }
+  .bk__link { display: grid; grid-template-rows: auto 1fr; height: 100%; color: inherit; text-decoration: none; }
+  .bk__bild { aspect-ratio: 16 / 10; background: var(--sand); overflow: hidden; }
+  .bk__bild img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .bk__leer { height: 100%; display: grid; place-items: center; font-family: var(--kopf); font-weight: 800; font-size: 2rem; color: var(--sand-dunkel); }
+  .bk__text { padding: 1.2rem 1.3rem 1.4rem; }
+  .bk__meta { display: flex; align-items: center; gap: 0.7rem; font-size: 0.85rem; color: var(--grau); margin-bottom: 0.6rem; }
+  .chip { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25em 0.7em; border-radius: 999px; }
+  .chip--verein { background: var(--rot-hell); color: var(--rot-dunkel); }
+  .chip--fraktion { background: var(--tinte); color: #fff; }
+  h3 { font-size: 1.18rem; margin-bottom: 0.4rem; }
+  .bk__teaser { font-size: 0.95rem; color: var(--grau); margin: 0; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+</style>

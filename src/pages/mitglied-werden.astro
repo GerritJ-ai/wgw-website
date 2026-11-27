@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import Mail from '../components/Mail.astro';
+import bild from '../assets/bilder/mitmachen.webp';
+import { SITE, u } from '../lib/site';
+---
+
+<Base title="Mitglied werden" description="Mitglied im Verein der Wählergemeinschaft Witzwort werden – für 12 € im Jahr. Beitrittserklärung herunterladen, ausfüllen, abgeben.">
+  <Seitenkopf eyebrow="Mitglied werden" title="Du hast uns hier gerade noch gefehlt!" lead="Gemeinsam können wir vieles erreichen. Herzlich willkommen in unserem Team." />
+
+  <section class="abschnitt">
+    <div class="wrap zwei">
+      <div class="prosa">
+        <p><strong>Du möchtest Dich gerne als Mitglied im Verein der WGW für unser Dorf engagieren – aber nicht politisch tätig werden? Gar kein Problem! In der WGW hast Du die Wahl, ob Du Dich ausschließlich über den Verein oder über die Politik in die Gemeinschaft einbringen willst. Deine Entscheidung!</strong></p>
+        <p>Der Verein der WGW ist ein Zusammenschluss von Dorfbewohnern, die den Sinn ihres Lebens nicht zwangsläufig in der Politik suchen. Vielmehr sind sie in ihren Familien, in der Gemeinschaft und den Vereinen der Gemeinde verwurzelt und wollen den dörflichen Charakter und Zusammenhalt pflegen und erhalten.</p>
+        <p>Je mehr Mitglieder mit und an der WGW teilhaben, desto größer die Chance, Dorfleben zu verwirklichen und zu leben. Unabhängig vom politischen Geschehen unserer Gemeinde geht es um Gemeinschaft und persönlichen Kontakt. Hand in Hand für unsere Kinder, unsere Nachbarn und unser Dorf.</p>
+        <p><a class="pfeil" href={u('/verein/')}>Mehr über die Aktivitäten unseres Vereins</a></p>
+      </div>
+      <Image src={bild} alt="" width={900} height={520} fit="cover" class="bild" />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--sand">
+    <div class="wrap">
+      <p class="eyebrow">So geht's</p>
+      <h2>In drei Schritten dabei</h2>
+      <ol class="schritte">
+        <li><span>1</span><h3>Herunterladen</h3><p>Lade Dir die Beitrittserklärung als PDF herunter und drucke sie aus.</p></li>
+        <li><span>2</span><h3>Ausfüllen</h3><p>Trage Deine Angaben ein und unterschreibe die Erklärung.</p></li>
+        <li><span>3</span><h3>Abgeben</h3><p>Sende oder gib sie unserem Vereinsvorsitzenden – wir melden uns bei Dir.</p></li>
+      </ol>
+
+      <div class="beitritt karte">
+        <div>
+          <p class="preis"><strong>12 €</strong> im Jahr</p>
+          <p>Beitragssatz für die Vereinsmitgliedschaft. Beitrittserklärung, Stand September 2021 (PDF, 111 KB).</p>
+          <a class="btn" href={u('/downloads/beitrittserklaerung-wgw.pdf')} download>Beitrittserklärung herunterladen</a>
+        </div>
+        <div>
+          <h3>Abgabe und Fragen</h3>
+          <p>
+            {SITE.verein.name}, {SITE.verein.rolle}<br />
+            <a href={`tel:${SITE.verein.telefon.replace(/\s/g, '')}`}>{SITE.verein.telefon}</a><br />
+            <Mail adresse={SITE.verein.email} />
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .zwei { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem clamp(2rem, 6vw, 5rem); align-items: center; }
+  @media (max-width: 860px) { .zwei { grid-template-columns: 1fr; } }
+  .zwei :global(.bild) { border-radius: var(--radius); width: 100%; }
+  .schritte { list-style: none; padding: 0; margin: 2rem 0; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .schritte span { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border-radius: 50%; background: var(--rot); color: #fff; font-family: var(--kopf); font-weight: 750; font-size: 1.2rem; margin-bottom: 0.9rem; }
+  .schritte p { color: var(--grau); margin: 0; }
+  .beitritt { display: grid; grid-template-columns: 1.3fr 1fr; gap: 2rem 3rem; align-items: start; }
+  @media (max-width: 720px) { .beitritt { grid-template-columns: 1fr; } }
+  .preis { font-size: 1.1rem; margin-bottom: 0.4rem; }
+  .preis strong { font-family: var(--kopf); font-size: 2.8rem; color: var(--tinte); letter-spacing: -0.02em; }
+</style>

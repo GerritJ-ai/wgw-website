@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { u, datum } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const berichte = (await getCollection('berichte')).sort((a, b) => +b.data.date - +a.data.date);
+  return berichte.map((bericht, i) => ({
+    params: { id: bericht.id },
+    props: { bericht, neuer: berichte[i - 1], aelter: berichte[i + 1] },
+  }));
+}
+
+const { bericht, neuer, aelter } = Astro.props;
+const { Content } = await render(bericht);
+const { title, date, bereich, teaser } = bericht.data;
+---
+
+<Base title={title} description={teaser}>
+  <article>
+    <header class="seitenkopf">
+      <div class="schmal">
+        <p class="meta">
+          <a href={u(`/${bereich}/`)}>{bereich === 'verein' ? 'Verein' : 'Fraktion'}</a>
+          <time datetime={date.toISOString().slice(0, 10)}>{datum(date)}</time>
+        </p>
+        <h1>{title}</h1>
+      </div>
+    </header>
+    <div class="schmal prosa inhalt">
+      <Content />
+    </div>
+  </article>
+
+  <nav class="schmal blaettern" aria-label="Weitere Berichte">
+    {aelter ? <a href={u(`/aktuelles/${aelter.id}/`)}><span>← Älter</span>{aelter.data.title}</a> : <span />}
+    {neuer ? <a class="rechts" href={u(`/aktuelles/${neuer.id}/`)}><span>Neuer →</span>{neuer.data.title}</a> : <span />}
+  </nav>
+  <p class="schmal zurueck"><a class="pfeil" href={u('/aktuelles/')}>Alle Berichte</a></p>
+</Base>
+
+<style>
+  .seitenkopf h1 { max-width: none; font-size: clamp(1.9rem, 4.2vw, 3rem); }
+  .meta { display: flex; gap: 1rem; align-items: center; font-size: 0.9rem; color: var(--grau); margin-bottom: 1rem; }
+  .meta a { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; background: var(--rot); color: #fff; padding: 0.3em 0.8em; border-radius: 999px; }
+  .inhalt { padding-block: clamp(2rem, 5vw, 3.5rem); }
+  .inhalt :global(img) { margin-inline: auto; max-height: 85vh; width: auto; }
+  .blaettern { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid var(--linie); padding-top: 1.5rem; }
+  .blaettern a { text-decoration: none; color: var(--tinte); font-weight: 600; line-height: 1.35; }
+  .blaettern a span { display: block; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rot); margin-bottom: 0.2rem; }
+  .blaettern .rechts { text-align: right; }
+  .zurueck { padding-block: 2rem 4rem; }
+</style>

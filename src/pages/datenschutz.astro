@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import Mail from '../components/Mail.astro';
+import { SITE, u } from '../lib/site';
+---
+
+<Base title="Datenschutz">
+  <Seitenkopf title="Datenschutzerklärung" lead="Kurz gesagt: Diese Website setzt keine Cookies, nutzt keine Analyse-Werkzeuge und bindet keine Inhalte von Dritten direkt ein." />
+  <section class="abschnitt">
+    <div class="schmal prosa">
+      <h2 style="margin-top:0">Verantwortlicher</h2>
+      <p>
+        {SITE.name}{SITE.anschrift && <>, {SITE.anschrift}</>}<br />
+        vertreten durch {SITE.verein.name} ({SITE.verein.rolle})<br />
+        E-Mail: <Mail adresse={SITE.verein.email} />
+      </p>
+      <p>Weitere Angaben stehen im <a href={u('/impressum/')}>Impressum</a>.</p>
+
+      <h2>Hosting und Server-Logfiles</h2>
+      <p>Diese Website besteht aus statischen Dateien und wird über GitHub Pages bereitgestellt, einen Dienst der GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA (ein Unternehmen der Microsoft Corporation). Beim Aufruf der Seiten verarbeitet GitHub technisch notwendige Zugriffsdaten, insbesondere die IP-Adresse, Datum und Uhrzeit des Abrufs, die abgerufene Datei sowie Angaben zu Browser und Betriebssystem. Dies ist erforderlich, um die Seite auszuliefern und den sicheren Betrieb zu gewährleisten.</p>
+      <p>Rechtsgrundlage ist unser berechtigtes Interesse an einer sicheren und zuverlässigen Bereitstellung der Website (Art. 6 Abs. 1 lit. f DSGVO). Dabei können Daten in die USA übermittelt werden; GitHub ist unter dem EU-U.S. Data Privacy Framework zertifiziert. Näheres in der <a href="https://docs.github.com/de/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">Datenschutzerklärung von GitHub</a>.</p>
+
+      <h2>Cookies, Analyse und Schriftarten</h2>
+      <p>Wir setzen keine Cookies und verwenden keine Analyse- oder Werbedienste. Schriftarten werden von unserem eigenen Webspace geladen; es findet keine Verbindung zu Schriftarten-Diensten Dritter statt.</p>
+
+      <h2>Instagram-Beiträge</h2>
+      <p>Unter „Aktuelles“ zeigen wir Beiträge unseres Instagram-Kanals. Bilder und Texte werden dafür einmal täglich automatisiert abgerufen und als Kopie auf unserem Webspace gespeichert. Beim Besuch unserer Website wird deshalb <strong>keine</strong> Verbindung zu Instagram bzw. Meta aufgebaut. Erst wenn Sie einen Beitrag oder den Link zu unserem Kanal anklicken, wechseln Sie zu Instagram (Meta Platforms Ireland Ltd.); dort gelten deren Datenschutzbestimmungen.</p>
+
+      <h2>Kontaktaufnahme</h2>
+      <p>Wenn Sie uns per E-Mail oder Telefon kontaktieren, verarbeiten wir Ihre Angaben, um Ihr Anliegen zu bearbeiten (Art. 6 Abs. 1 lit. f DSGVO, bei Mitgliedschaftsanfragen Art. 6 Abs. 1 lit. b DSGVO). Die Daten werden gelöscht, sobald sie für diesen Zweck nicht mehr erforderlich sind und keine gesetzlichen Aufbewahrungspflichten entgegenstehen.</p>
+
+      <h2>Beitrittserklärung</h2>
+      <p>Die Beitrittserklärung wird als PDF zum Ausdrucken angeboten. Angaben, die Sie darauf machen, verarbeiten wir ausschließlich zur Begründung und Verwaltung der Vereinsmitgliedschaft (Art. 6 Abs. 1 lit. b DSGVO).</p>
+
+      <h2>Fotos und Namen auf dieser Website</h2>
+      <p>Wir berichten über Veranstaltungen und Ämter und zeigen dabei Fotos und Namen von Mitgliedern und Teilnehmenden. Wenn Sie mit einer Darstellung Ihrer Person nicht einverstanden sind, genügt eine kurze Nachricht an die oben genannte Adresse – wir entfernen den Inhalt umgehend.</p>
+
+      <h2>Ihre Rechte</h2>
+      <p>Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie das Recht, der Verarbeitung zu widersprechen (Art. 21). Außerdem können Sie sich bei einer Datenschutz-Aufsichtsbehörde beschweren, in Schleswig-Holstein beim Unabhängigen Landeszentrum für Datenschutz (ULD), Holstenstraße 98, 24103 Kiel.</p>
+
+      <p><em>Stand: November 2026</em></p>
+    </div>
+  </section>
+</Base>

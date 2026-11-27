@@ -1,0 +1,52 @@
+---
+import Base from '../../layouts/Base.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import PersonKarte from '../../components/PersonKarte.astro';
+import Mail from '../../components/Mail.astro';
+import { team } from '../../data/team';
+import { SITE, u } from '../../lib/site';
+---
+
+<Base title="Unser Team" description="Deine Ansprechpartner bei der Wählergemeinschaft Witzwort: Fraktion, Vereinsvorstand und bürgerliche Mitglieder.">
+  <Seitenkopf eyebrow="Unser Team" title="Deine Ansprechpartner" lead={`Unser Team besteht aus ${team.length} engagierten Fraktions-, Vorstands- und bürgerlichen Mitgliedern, die die Gemeinde und den Verein aktiv gestalten. Zusammen mit insgesamt 66 Mitgliedern geben sie der WGW ihr Gesicht.`} />
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="raster raster--2 kontakt">
+        <div class="karte">
+          <p class="eyebrow">Verein</p>
+          <h2>{SITE.verein.name}</h2>
+          <p>{SITE.verein.rolle}<br /><a href={`tel:${SITE.verein.telefon.replace(/\s/g, '')}`}>{SITE.verein.telefon}</a><br /><Mail adresse={SITE.verein.email} /></p>
+        </div>
+        <div class="karte">
+          <p class="eyebrow">Fraktion</p>
+          <h2>{SITE.fraktion.name}</h2>
+          <p>{SITE.fraktion.rolle}<br /><Mail adresse={SITE.fraktion.email} /></p>
+        </div>
+      </div>
+
+      <h2 style="margin-top:4rem">Fraktion, Vorstand und bürgerliche Mitglieder</h2>
+      <div class="raster raster--4" style="margin-top:2rem">
+        {team.map((p) => <PersonKarte person={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--sand">
+    <div class="wrap ehre">
+      <div>
+        <p class="eyebrow">Ehrenbürgermeister</p>
+        <h2>Willi Berendt</h2>
+        <p class="lead">Gründungsmitglied der WGW, Bürgermeister von 1986 bis 2018 und Träger des Bundesverdienstkreuzes.</p>
+      </div>
+      <a class="btn btn--linie" href={u('/team/ehrenbuergermeister/')}>Zum Portrait</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .kontakt h2 { font-size: 1.6rem; margin-bottom: 0.3em; }
+  .ehre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem 3rem; }
+  .ehre h2 { margin-bottom: 0.3em; }
+  .ehre .lead { margin: 0; }
+</style>

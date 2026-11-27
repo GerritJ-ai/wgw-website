@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import BerichtKarte from '../components/BerichtKarte.astro';
+import PersonKarte from '../components/PersonKarte.astro';
+import gruppe from '../assets/bilder/fraktion-2023.webp';
+import { team } from '../data/team';
+import { u } from '../lib/site';
+
+const alle = (await getCollection('berichte', (b) => b.data.bereich === 'fraktion')).sort((a, b) => +b.data.date - +a.data.date);
+const berichte = alle.filter((b) => !b.data.title.startsWith('Portrait'));
+const portraits = alle.filter((b) => b.data.title.startsWith('Portrait')).sort((a, b) => a.data.title.localeCompare(b.data.title));
+const fraktion = team.filter((p) => p.gruppe !== 'verein');
+---
+
+<Base title="Unsere Fraktion" description="Die Fraktion der Wählergemeinschaft Witzwort im Gemeinderat: unabhängig, ohne Fraktionszwang und am Wohl der Gemeinde ausgerichtet.">
+  <Seitenkopf eyebrow="Die Fraktion" title="Kommunalpolitik für alle in Witzwort" lead="Neutral sowie unabhängig von herkömmlichen Parteien, konstruktiv, mit Sachverstand und mit kritischem Blick für das Notwendige und Machbare." />
+
+  <section class="abschnitt">
+    <div class="wrap zwei">
+      <div>
+        <h2>Seit 1978 in Verantwortung</h2>
+        <p>Als politische Fraktion der WGW möchten wir alle Menschen, unabhängig ihrer politischen Orientierung, in unsere kommunalpolitische Arbeit integrieren und gemeinsam für alle Einwohner die Geschicke unseres Dorfes formen und mitbestimmen.</p>
+        <p>Bereits seit Gründung der WGW erhält die Fraktion hierfür vom Wähler den Auftrag. So stehen wir seitdem ohne Unterbrechung mit unseren Bürgermeisterkandidaten und gewählten Vertretern im Gemeinderat als politische Mehrheit in Verantwortung.</p>
+        <p><a class="btn" href={u('/programm/')}>Unser Programm</a></p>
+      </div>
+      <figure>
+        <Image src={gruppe} alt="Sechs Kandidatinnen und Kandidaten der WGW zur Kommunalwahl 2023 vor einer Backsteinwand" width={900} height={600} fit="cover" />
+        <figcaption>Die Direktkandidatinnen und -kandidaten der WGW zur Kommunalwahl 2023</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--dunkel">
+    <div class="wrap">
+      <p class="eyebrow" style="color:#ff8a8e">Kommunalwahl 14. Mai 2023</p>
+      <h2>Witzwort hat gewählt – wir sagen Danke</h2>
+      <div class="ergebnis">
+        <div><strong>60,8 %</strong><span>der Stimmen für die WGW</span></div>
+        <div><strong>7 von 11</strong><span>Sitzen im Gemeinderat</span></div>
+        <div><strong>1.480</strong><span>Stimmen</span></div>
+        <div><strong>59,6 %</strong><span>Wahlbeteiligung</span></div>
+      </div>
+      <p>Alle sechs Direktkandidatinnen und -kandidaten sowie Listenplatz 7 wurden in den Gemeinderat gewählt. <a href={u('/aktuelles/2023-05-15-witzwort-hat-gewaehlt-wir-sagen-danke/')} style="color:#fff">Zum Wahlbericht</a></p>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <p class="eyebrow">Wahlperiode 2023 – 2028</p>
+      <h2>Unsere Vertreterinnen und Vertreter</h2>
+      <div class="raster raster--4" style="margin-top:2rem">
+        {fraktion.map((p) => <PersonKarte person={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--sand">
+    <div class="wrap">
+      <p class="eyebrow">Aus dem Fraktionsleben</p>
+      <h2>Berichte</h2>
+      <div class="raster raster--3" style="margin-top:2rem">
+        {berichte.map((b) => <BerichtKarte bericht={b} />)}
+      </div>
+
+      <h3 style="margin-top:3.5rem">Kandidatenportraits zur Kommunalwahl 2023</h3>
+      <ul class="portraits">
+        {portraits.map((p) => <li><a href={u(`/aktuelles/${p.id}/`)}>{p.data.title.replace('Portrait – ', '')}</a></li>)}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem clamp(2rem, 6vw, 5rem); align-items: center; }
+  @media (max-width: 860px) { .zwei { grid-template-columns: 1fr; } }
+  figure { margin: 0; }
+  figure :global(img) { border-radius: var(--radius); width: 100%; }
+  figcaption { font-size: 0.88rem; color: var(--grau); margin-top: 0.6rem; }
+  .ergebnis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+  .ergebnis div { display: grid; border-left: 3px solid var(--rot); padding-left: 1rem; }
+  .ergebnis strong { font-family: var(--kopf); font-size: clamp(2rem, 4vw, 2.8rem); color: #fff; line-height: 1.1; letter-spacing: -0.02em; }
+  .ergebnis span { font-size: 0.93rem; }
+  .portraits { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .portraits a { display: block; text-decoration: none; font-weight: 600; padding: 0.55em 1.1em; border-radius: 999px; background: #fff; border: 1px solid var(--linie); color: var(--tinte); }
+  .portraits a:hover { border-color: var(--rot); color: var(--rot-dunkel); }
+</style>

@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import BerichtKarte from '../components/BerichtKarte.astro';
+import PersonKarte from '../components/PersonKarte.astro';
+import tolk from '../assets/bilder/tolk-2023.webp';
+import { team } from '../data/team';
+import { u } from '../lib/site';
+
+const berichte = (await getCollection('berichte', (b) => b.data.bereich === 'verein'))
+  .sort((a, b) => +b.data.date - +a.data.date)
+  .slice(0, 6);
+const vorstand = team.filter((p) => p.gruppe !== 'fraktion');
+
+const traditionen = [
+  { titel: 'Weihnachtsmarkt mit Tannenbaumverkauf', wann: 'Am 3. Advent', text: 'Seit Jahrzehnten ein fester Termin im Dorf. Aus dem Erlös des Tannenbaumverkaufs finanzieren wir unsere Aktionen für die Kinder der Gemeinde.' },
+  { titel: 'Ausflug zur Tolk-Schau', wann: 'Im Spätsommer', text: 'Mit dem Bus, einer Grillhütte und vielen mitgebrachten Leckereien geht es mit den Kleinsten des Dorfes in den Freizeitpark – 2023 waren 57 Witzworterinnen und Witzworter dabei.' },
+  { titel: 'Gemeinsames Dorfgrillen', wann: 'Im Sommer', text: 'Klönschnack auf der Festwiese: zusammenkommen, essen, schnacken. Eingeladen sind alle – egal ob sie der WGW angehören oder nicht.' },
+];
+---
+
+<Base title="Unser Verein" description="Der Verein der Wählergemeinschaft Witzwort: Dorfleben pflegen, zusammenhalten, gemeinsam füreinander einstehen.">
+  <Seitenkopf eyebrow="Der Verein" title="Dorfleben zum Leben erwecken" lead="Der Verein der WGW ist ein Zusammenschluss von Dorfbewohnern, die den Sinn ihres Lebens nicht zwangsläufig in der Politik suchen – sondern in Familie, Gemeinschaft und den Vereinen der Gemeinde." />
+
+  <section class="abschnitt">
+    <div class="wrap zwei">
+      <div>
+        <h2>Gemeinsam füreinander einstehen</h2>
+        <p>Wir haben es uns zur Aufgabe gemacht, zusammenzurücken und Dorfleben zum Leben zu erwecken. Wir wollen, dass unsere Kinder lernen und sehen, wie wir miteinander respektvoll und wertschätzend umgehen – wie wir uns gegenseitig unterstützen und füreinander einstehen.</p>
+        <p>Der Verein möchte daran seinen Teil beitragen, indem wir miteinander sprechen, uns zuhören und uns ein Bild von unserem Dorf sowie den Interessen und Bedürfnissen der Einwohner machen, um dann zielorientierte Ideen entwickeln zu können.</p>
+        <p>Unabhängig vom politischen Geschehen unserer Gemeinde geht es um Gemeinschaft und persönlichen Kontakt. Hand in Hand für unsere Kinder, unsere Nachbarn und unser Dorf.</p>
+        <p><a class="btn" href={u('/mitglied-werden/')}>Mitglied werden</a> &nbsp; <a class="pfeil" href={u('/satzung/')}>Unsere Satzung</a></p>
+      </div>
+      <figure>
+        <Image src={tolk} alt="Gruppenfoto der Teilnehmerinnen und Teilnehmer vor der Grillhütte in der Tolk-Schau" width={900} height={600} fit="cover" />
+        <figcaption>WGW on Tour: Ausflug zur Tolk-Schau im September 2023</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--sand">
+    <div class="wrap">
+      <p class="eyebrow">Für alle im Dorf</p>
+      <h2>Drei Traditionen</h2>
+      <div class="raster raster--3" style="margin-top:2rem">
+        {traditionen.map((t) => (
+          <article class="karte">
+            <p class="wann">{t.wann}</p>
+            <h3>{t.titel}</h3>
+            <p>{t.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <div>
+          <p class="eyebrow">Vereinsvorstand</p>
+          <h2>Eure Ansprechpartner im Verein</h2>
+        </div>
+        <a class="pfeil" href={u('/team/')}>Ganzes Team</a>
+      </div>
+      <div class="raster raster--4">
+        {vorstand.map((p) => <PersonKarte person={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--sand">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <div>
+          <p class="eyebrow">Aus dem Vereinsleben</p>
+          <h2>Berichte und Rückblicke</h2>
+        </div>
+        <a class="pfeil" href={u('/aktuelles/')}>Alle Berichte</a>
+      </div>
+      <div class="raster raster--3">
+        {berichte.map((b) => <BerichtKarte bericht={b} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem clamp(2rem, 6vw, 5rem); align-items: center; }
+  @media (max-width: 860px) { .zwei { grid-template-columns: 1fr; } }
+  figure { margin: 0; }
+  figure :global(img) { border-radius: var(--radius); width: 100%; }
+  figcaption { font-size: 0.88rem; color: var(--grau); margin-top: 0.6rem; }
+  .wann { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rot); margin-bottom: 0.6rem; }
+</style>

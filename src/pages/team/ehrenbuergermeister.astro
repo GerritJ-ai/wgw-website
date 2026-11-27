@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import portrait from '../../assets/team/willi-berendt.webp';
+import orden from '../../assets/bilder/verdienstorden.webp';
+
+const aemter = [
+  ['1986 – 2018', 'Bürgermeister'],
+  ['1978 – 1986', 'Stellv. Bürgermeister'],
+  ['1986 – 1990', '2. Vorsitzender im Schulverband Oldenswort-Witzwort'],
+  ['1990 – 2007', '1. Vorsitzender im Schulverband Witzwort-Uelvesbüll'],
+  ['2007 – 2017', '1. Vorsitzender im Schulverband Witzwort'],
+];
+---
+
+<Base title="Unser Ehrenbürgermeister Willi Berendt" description="Willi Berendt – Gründungsmitglied der WGW, Bürgermeister von Witzwort 1986 bis 2018 und Träger des Bundesverdienstkreuzes.">
+  <Seitenkopf eyebrow="Unser Ehrenbürgermeister" title="Willi Berendt" lead="Gründungsmitglied der WGW und mehr als 30 Jahre Bürgermeister von Witzwort – eine Amtszeit, die bisher kein anderer erreicht hat." />
+
+  <section class="abschnitt">
+    <div class="wrap profil">
+      <aside>
+        <Image src={portrait} alt="Portrait von Willi Berendt" width={520} height={690} fit="cover" position="top" />
+        <ul class="liste-haken">
+          <li>Seit 1978 Mitglied in der WGW (Gründungsmitglied)</li>
+          <li>Ehrenbürger der Gemeinde Witzwort</li>
+          <li>Träger des Bundesverdienstkreuzes</li>
+          <li>Träger der Freiherr-vom-Stein-Verdienstnadel</li>
+          <li>Träger der Deutschen Feuerwehr-Ehrenmedaille</li>
+        </ul>
+        <h2 class="klein">Politisches Profil</h2>
+        <dl>
+          {aemter.map(([z, a]) => (<><dt>{z}</dt><dd>{a}</dd></>))}
+        </dl>
+      </aside>
+
+      <div class="prosa">
+        <h2 style="margin-top:0">Auszeichnung mit dem Bundesverdienstorden</h2>
+        <p><strong>Seit mehr als 30 Jahren ist Willi Berendt unser Bürgermeister. Eine Amtszeit, die in Witzwort bisher kein anderer Bürgermeister erreicht hat. Am 29. Mai 2017 wurde Willi Berendt für seine Arbeit mit dem Verdienstkreuz der Bundesrepublik Deutschland ausgezeichnet.</strong></p>
+        <figure>
+          <Image src={orden} alt="Verleihung der Bundesverdienstorden in Kiel, Willi Berendt ist der Zweite von rechts" width={900} height={506} />
+          <figcaption>Verleihung der Bundesverdienstorden u. a. mit Willi Berendt (2. v. r.). Quelle: schleswig-holstein.de, © Frank Peter</figcaption>
+        </figure>
+        <p>Ministerpräsident Torsten Albig überreichte Willi Berendt diese hohe Auszeichnung in einer Feierstunde in Kiel. Ein ganz besonderer Tag, doch Willis Kommentar dazu: „Mir wäre lieber, die Maurer hätten heute angefangen, die Turnhalle zu bauen!“ Ein Satz, der nicht besser beschreiben könnte, was Willi Berendt ausmacht. Unser Bürgermeister ist jemand, der anpacken und umsetzen will. So ist es seinem Engagement zu verdanken, dass wir als Dorf heute dastehen, wo wir stehen.</p>
+        <p>Weil Willi die Nachbargemeinden überzeugen konnte, dem Schulverband beizutreten, ist Witzwort heute ein gesicherter Schulstandort. Die Angliederung des Kindergartens an die Grundschule konnte durch seine große Eigeninitiative zügig und kostengünstig umgesetzt werden. Es ist ebenfalls seinem Verhandlungsgeschick zu verdanken, dass der im Ort errichtete Markttreff stets weiterbetrieben werden konnte. Willi stellte sich auch als Organisator zur Verfügung, nachdem er im Namen der Gemeinde die leerstehende Gastwirtschaft im Dorf gekauft hatte. Die Gemeinde hat in Sanierungs- und Umbaumaßnahmen eine Unterkunft für drei Flüchtlingsfamilien geschaffen.</p>
+        <p>Als unsere Gemeinde durch den Brand der Turnhalle im Herbst 2016 erschüttert wurde, setzte unser Bürgermeister alles daran, schnellstmöglich mit allen Institutionen in Verbindung zu treten, um den Neubau zielstrebig voranzutreiben. Willi war täglich vor Ort, um sicherzustellen, dass Witzwort so schnell wie möglich eine neue Turnhalle bekommt. All diese Projekte betreut Willi seit über 30 Jahren. Dabei zeichnet er sich durch seine große Beharrlichkeit aus. Wenn er sich etwas in den Kopf gesetzt hat, dann wird das auch umgesetzt. Und wenn es sein muss, setzt sich der 79-Jährige auch selbst auf den Bagger.</p>
+        <p>Willi ist ein Mann, der anpackt, und ein Bürgermeister, der Witzwort zu dem gemacht hat, was es heute ist: ein lebenswerter Ort und ein Dorf mit Qualität. Deswegen verdient ein Bürgermeister wie Willi Berendt das Verdienstkreuz der Bundesrepublik Deutschland. Wir können stolz sein, einen Mann wie Willi als Bürgermeister zu haben! Wir möchten uns auf diesem Wege bei Willi bedanken. Danke für dein Engagement, deine Energie und dein Durchhaltevermögen! Danke dafür, dass du so oft deinen Dickkopf durchgesetzt hast, um das Beste für Witzwort zu erreichen! Und auch ein großer Dank an Elke, die in 30 Jahren Amtszeit immer hinter dir stand!</p>
+        <p><strong>Der Vorstand der WGW</strong> <em>(Text aus dem Jahr 2017)</em></p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .profil { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: 2.5rem clamp(2rem, 6vw, 5rem); align-items: start; }
+  @media (max-width: 860px) { .profil { grid-template-columns: 1fr; } }
+  aside :global(img) { border-radius: var(--radius); width: 100%; margin-bottom: 1.6rem; }
+  .klein { font-size: 1.2rem; margin-top: 2rem; }
+  dl { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1rem; font-size: 0.95rem; margin: 0; }
+  dt { color: var(--grau); white-space: nowrap; }
+  dd { margin: 0; }
+  figure { margin: 1.6rem 0; }
+  figure :global(img) { margin: 0; }
+  figcaption { font-size: 0.85rem; color: var(--grau); margin-top: 0.5rem; }
+</style>

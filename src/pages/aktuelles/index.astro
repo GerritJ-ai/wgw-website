@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Seitenkopf from '../../components/Seitenkopf.astro';
+import Instagram from '../../components/Instagram.astro';
+import BerichtKarte from '../../components/BerichtKarte.astro';
+import { SITE } from '../../lib/site';
+
+const berichte = (await getCollection('berichte'))
+  .filter((b) => !b.data.title.startsWith('Portrait –'))
+  .sort((a, b) => +b.data.date - +a.data.date);
+const jahre = [...new Set(berichte.map((b) => b.data.date.getUTCFullYear()))];
+---
+
+<Base title="Aktuelles" description="Neuigkeiten der Wählergemeinschaft Witzwort von Instagram sowie Berichte aus Verein und Fraktion.">
+  <Seitenkopf eyebrow="Aktuelles" title="Neues von der WGW" lead="Aktuelle Termine, Fotos und kurze Berichte veröffentlichen wir auf Instagram. Ausführliche Rückblicke aus den vergangenen Jahren findest Du darunter im Archiv." />
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <h2>Instagram</h2>
+        <a class="pfeil" href={SITE.instagram.url} target="_blank" rel="noopener">@{SITE.instagram.name} folgen</a>
+      </div>
+      <Instagram />
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--sand">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <div>
+          <p class="eyebrow">Archiv</p>
+          <h2>Berichte aus Verein und Fraktion</h2>
+        </div>
+        <nav class="jahre" aria-label="Jahre">
+          {jahre.map((j) => <a href={`#j${j}`}>{j}</a>)}
+        </nav>
+      </div>
+      {jahre.map((j) => (
+        <div class="jahr" id={`j${j}`}>
+          <h3>{j}</h3>
+          <div class="raster raster--3">
+            {berichte.filter((b) => b.data.date.getUTCFullYear() === j).map((b) => <BerichtKarte bericht={b} />)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .jahre { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .jahre a { text-decoration: none; font-weight: 600; font-size: 0.92rem; padding: 0.35em 0.9em; border-radius: 999px; background: #fff; border: 1px solid var(--linie); color: var(--tinte); }
+  .jahre a:hover { border-color: var(--rot); color: var(--rot-dunkel); }
+  .jahr { scroll-margin-top: 6rem; margin-top: 3rem; }
+  .jahr h3 { font-size: 2rem; color: var(--rot); margin-bottom: 1.2rem; }
+</style>

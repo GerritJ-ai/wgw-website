@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import Mail from '../components/Mail.astro';
+import { SITE, u } from '../lib/site';
+---
+
+<Base title="Impressum">
+  <Seitenkopf title="Impressum" />
+  <section class="abschnitt">
+    <div class="schmal prosa">
+      <h2 style="margin-top:0">Angaben gemäß § 5 DDG</h2>
+      <p>
+        <strong>{SITE.name}</strong><br />
+        {SITE.anschrift && <>{SITE.anschrift}<br /></>}
+        Vertreten durch den {SITE.verein.rolle}en {SITE.verein.name}
+      </p>
+      <h3>Kontakt</h3>
+      <p>
+        Telefon: <a href={`tel:${SITE.verein.telefon.replace(/\s/g, '')}`}>{SITE.verein.telefon}</a><br />
+        E-Mail: <Mail adresse={SITE.verein.email} /><br />
+        Allgemein: <Mail adresse={SITE.email} />
+      </p>
+      <h3>Verantwortlich für den Inhalt</h3>
+      <p>{SITE.verein.name}{SITE.anschrift && <>, {SITE.anschrift}</>}</p>
+
+      <h3>Bildnachweise</h3>
+      <p>Eigene Aufnahmen der Wählergemeinschaft Witzwort. Symbolbilder (Startseite, Programm, Mitglied werden): pixabay.com. Foto der Ordensverleihung auf der Seite „Ehrenbürgermeister“: schleswig-holstein.de, © Frank Peter.</p>
+
+      <h3>Haftung für Inhalte und Links</h3>
+      <p>Die Inhalte dieser Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber verantwortlich.</p>
+
+      <p>Hinweise zum Umgang mit personenbezogenen Daten stehen in der <a href={u('/datenschutz/')}>Datenschutzerklärung</a>.</p>
+    </div>
+  </section>
+</Base>

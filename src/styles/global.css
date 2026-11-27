@@ -1,0 +1,130 @@
+@import '@fontsource-variable/bricolage-grotesque';
+@import '@fontsource-variable/instrument-sans';
+
+:root {
+  --rot: #c4161c;
+  --rot-dunkel: #9a0e13;
+  --rot-hell: #fbeceb;
+  --tinte: #15181d;
+  --text: #2b2f36;
+  --grau: #636872;
+  --sand: #f6f2ec;
+  --sand-dunkel: #ebe5db;
+  --linie: #e2dcd1;
+  --weiss: #fff;
+  --radius: 14px;
+  --breite: 1160px;
+  --schatten: 0 1px 2px rgb(21 24 29 / 0.05), 0 8px 24px rgb(21 24 29 / 0.07);
+  --kopf: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  --lauf: 'Instrument Sans Variable', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--lauf);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--weiss);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--rot-dunkel); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { color: var(--rot); }
+:focus-visible { outline: 3px solid var(--rot); outline-offset: 3px; border-radius: 4px; }
+
+h1, h2, h3, h4 {
+  font-family: var(--kopf);
+  color: var(--tinte);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5em;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2.2rem, 5.2vw, 3.9rem); font-weight: 750; }
+h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 700; }
+h3 { font-size: 1.3rem; font-weight: 650; letter-spacing: -0.01em; }
+h4 { font-size: 1.08rem; font-weight: 650; letter-spacing: 0; }
+p { margin: 0 0 1em; }
+
+.wrap { width: min(100% - 2.5rem, var(--breite)); margin-inline: auto; }
+.schmal { width: min(100% - 2.5rem, 760px); margin-inline: auto; }
+.abschnitt { padding-block: clamp(3.5rem, 8vw, 6rem); }
+.abschnitt--sand { background: var(--sand); }
+.abschnitt--dunkel { background: var(--tinte); color: #d9dbe0; }
+.abschnitt--dunkel h2, .abschnitt--dunkel h3 { color: #fff; }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6em;
+  font-size: 0.8rem; font-weight: 650; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--rot); margin-bottom: 1rem;
+}
+.eyebrow::before { content: ''; width: 1.8em; height: 2px; background: currentColor; }
+.lead { font-size: clamp(1.1rem, 1.6vw, 1.28rem); color: var(--grau); max-width: 62ch; }
+.kopfzeile { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem 2rem; margin-bottom: 2.2rem; }
+.kopfzeile h2 { margin: 0; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  padding: 0.8em 1.35em; border-radius: 999px;
+  font-weight: 650; font-size: 1rem; text-decoration: none; line-height: 1.2;
+  background: var(--rot); color: #fff; border: 2px solid var(--rot);
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
+}
+.btn:hover { background: var(--rot-dunkel); border-color: var(--rot-dunkel); color: #fff; transform: translateY(-1px); }
+.btn--hell { background: #fff; color: var(--tinte); border-color: #fff; }
+.btn--hell:hover { background: var(--sand); border-color: var(--sand); color: var(--tinte); }
+.btn--linie { background: transparent; color: var(--tinte); border-color: var(--tinte); }
+.btn--linie:hover { background: var(--tinte); border-color: var(--tinte); color: #fff; }
+.btn--linie-hell { background: transparent; color: #fff; border-color: rgb(255 255 255 / 0.7); }
+.btn--linie-hell:hover { background: #fff; border-color: #fff; color: var(--tinte); }
+.pfeil { font-weight: 650; text-decoration: none; white-space: nowrap; }
+.pfeil::after { content: ' →'; transition: margin 0.15s; }
+.pfeil:hover::after { margin-left: 0.25em; }
+
+.raster { display: grid; gap: 1.5rem; }
+.raster--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.raster--3 { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.raster--4 { grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); }
+
+.karte {
+  background: #fff; border: 1px solid var(--linie); border-radius: var(--radius);
+  padding: clamp(1.4rem, 3vw, 2rem);
+}
+.karte > :last-child { margin-bottom: 0; }
+
+/* Seitenkopf der Unterseiten */
+.seitenkopf { background: var(--sand); padding-block: clamp(2.8rem, 7vw, 5rem) clamp(2.2rem, 5vw, 3.5rem); border-bottom: 1px solid var(--linie); }
+.seitenkopf h1 { font-size: clamp(2rem, 4.6vw, 3.3rem); max-width: 20ch; }
+.seitenkopf .lead { margin: 0; }
+
+/* Fließtext (Markdown-Berichte und Rechtstexte) */
+.prosa { font-size: 1.09rem; }
+.prosa h2 { font-size: 1.7rem; margin-top: 2em; }
+.prosa h3 { margin-top: 1.8em; }
+.prosa h4 { margin-top: 1.5em; }
+.prosa img { border-radius: var(--radius); margin-block: 1.6rem; }
+.prosa hr { border: 0; border-top: 1px solid var(--linie); margin: 2rem 0; }
+.prosa ul { padding-left: 1.2em; }
+.prosa li { margin-bottom: 0.45em; }
+.prosa li::marker { color: var(--rot); }
+.prosa a { overflow-wrap: anywhere; }
+.prosa table { border-collapse: collapse; width: 100%; }
+
+.liste-haken { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.85rem; }
+.liste-haken li { position: relative; padding-left: 1.9rem; }
+.liste-haken li::before {
+  content: ''; position: absolute; left: 0; top: 0.42em; width: 1.05rem; height: 1.05rem; border-radius: 50%;
+  background: var(--rot) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.3l2.6 2.6L12 5.5' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% no-repeat;
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: absolute; left: 1rem; top: -4rem; background: var(--tinte); color: #fff; padding: 0.6rem 1rem; border-radius: 8px; z-index: 100; }
+.skip:focus { top: 1rem; color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; animation: none !important; }
+}

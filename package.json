@@ -1,0 +1,19 @@
+{
+  "name": "wgw-website",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "instagram": "node scripts/fetch-instagram.mjs",
+    "build": "node scripts/fetch-instagram.mjs && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "astro": "^7.4.13",
+    "sharp": "^0.35.5"
+  }
+}

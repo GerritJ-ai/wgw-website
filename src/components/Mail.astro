@@ -1,0 +1,13 @@
+---
+// E-Mail-Adresse, leicht gegen Adress-Sammler geschützt (wird erst im Browser zusammengesetzt).
+interface Props { adresse: string }
+const [name, domain] = Astro.props.adresse.split('@');
+---
+<a class="mail" href="#" data-n={name} data-d={domain}>{name}<span aria-hidden="true"> [at] </span><span class="sr-only">@</span>{domain}</a>
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('a.mail').forEach((a) => {
+    const adr = `${a.dataset.n}@${a.dataset.d}`;
+    a.href = `mailto:${adr}`;
+    a.textContent = adr;
+  });
+</script>

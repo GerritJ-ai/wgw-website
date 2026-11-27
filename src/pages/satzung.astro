@@ -1,0 +1,28 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Seitenkopf from '../components/Seitenkopf.astro';
+import s1 from '../assets/bilder/satzung-1.webp';
+import s2 from '../assets/bilder/satzung-2.webp';
+import s3 from '../assets/bilder/satzung-3.webp';
+const seiten = [s1, s2, s3];
+---
+
+<Base title="Satzung" description="Die Satzung der Wählergemeinschaft Witzwort, Stand 29.11.2018.">
+  <Seitenkopf eyebrow="Unser Verein" title="Die Satzung der Wählergemeinschaft Witzwort" lead="Stand: 29. November 2018" />
+  <section class="abschnitt">
+    <div class="schmal seiten">
+      {seiten.map((s, i) => (
+        <a href={s.src} target="_blank" rel="noopener" aria-label={`Satzung, Seite ${i + 1} in voller Größe öffnen`}>
+          <Image src={s} alt={`Satzung der Wählergemeinschaft Witzwort, Seite ${i + 1} von ${seiten.length}`} width={1100} />
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .seiten { display: grid; gap: 2rem; }
+  .seiten a { display: block; border: 1px solid var(--linie); border-radius: 6px; overflow: hidden; box-shadow: var(--schatten); }
+  .seiten :global(img) { width: 100%; }
+</style>

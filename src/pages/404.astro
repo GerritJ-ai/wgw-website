@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { u } from '../lib/site';
+---
+
+<Base title="Seite nicht gefunden">
+  <section class="abschnitt">
+    <div class="schmal" style="text-align:center; padding-block: 4rem">
+      <p class="eyebrow">Fehler 404</p>
+      <h1>Hier ist leider nix.</h1>
+      <p class="lead" style="margin-inline:auto">Die Seite gibt es nicht (mehr). Vielleicht ist sie beim Umzug auf die neue Website umgezogen.</p>
+      <p><a class="btn" href={u('/')}>Zur Startseite</a> &nbsp; <a class="btn btn--linie" href={u('/aktuelles/')}>Aktuelles</a></p>
+    </div>
+  </section>
+</Base>

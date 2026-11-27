@@ -1,0 +1,58 @@
+name: Website bauen und veröffentlichen
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # täglich gegen 6 Uhr morgens (UTC 04:17): Instagram-Feed aktualisieren
+    - cron: '17 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - id: pages
+        uses: actions/configure-pages@v5
+      - name: Bauen (inkl. Instagram-Abruf)
+        run: npm run build
+        env:
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          BEHOLD_FEED_URL: ${{ secrets.BEHOLD_FEED_URL }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+      # GitHub schaltet Zeitpläne nach 60 Tagen ohne Aktivität im Repository ab –
+      # das erneute Aktivieren setzt diese Frist zurück.
+      - name: Zeitplan aktiv halten
+        if: github.event_name == 'schedule'
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/deploy.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

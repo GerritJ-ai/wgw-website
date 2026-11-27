@@ -1,0 +1,187 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Instagram from '../components/Instagram.astro';
+import BerichtKarte from '../components/BerichtKarte.astro';
+import hero from '../assets/bilder/hero.webp';
+import { SITE, u } from '../lib/site';
+
+const berichte = (await getCollection('berichte'))
+  .filter((b) => !b.data.title.startsWith('Portrait'))
+  .sort((a, b) => +b.data.date - +a.data.date)
+  .slice(0, 3);
+
+const themen = [
+  { nr: '01', titel: 'Grundsätzliches', text: 'Unabhängig, ohne Fraktionszwang und keiner Ideologie verpflichtet – unsere Prinzipien.', anker: 'grundsaetzliches' },
+  { nr: '02', titel: 'Familie und Vereine', text: 'Schule, Kita, Bauplätze und ein lebendiges Vereinsleben: das Herz unseres Dorfes.', anker: 'familie' },
+  { nr: '03', titel: 'Umwelt und Zukunft', text: 'Natur erhalten, Witzwort weiterentwickeln und bei der Energie neue Wege gehen.', anker: 'umwelt' },
+];
+---
+
+<Base>
+  <section class="hero">
+    <Image src={hero} alt="" class="hero__bild" widths={[800, 1400, 2000]} sizes="100vw" loading="eager" fetchpriority="high" />
+    <div class="wrap hero__inhalt">
+      <p class="eyebrow">Seit 1978 · unabhängig · parteifrei</p>
+      <h1>Für unsere Gemeinde machen wir uns stark.</h1>
+      <p class="hero__lead">Moin moin und herzlich willkommen bei der Wählergemeinschaft Witzwort. Als Verein und als Fraktion setzen wir uns gemeinsam für unser Dorf ein.</p>
+      <div class="hero__aktionen">
+        <a class="btn" href={u('/mitglied-werden/')}>Mitglied werden</a>
+        <a class="btn btn--linie-hell" href={u('/programm/')}>Unser Programm</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="zahlen" aria-label="Die WGW in Zahlen">
+    <div class="wrap zahlen__raster">
+      <div><strong>1978</strong><span>gegründet</span></div>
+      <div><strong>66</strong><span>Mitglieder</span></div>
+      <div><strong>7 von 11</strong><span>Sitzen im Gemeinderat</span></div>
+      <div><strong>12 €</strong><span>Jahresbeitrag im Verein</span></div>
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <p class="eyebrow">Wer wir sind</p>
+      <div class="intro">
+        <h2>Zwei Bereiche, ein Ziel: gemeinsam für Witzwort.</h2>
+        <p class="lead">Bereits 1978 wurde die WGW gegründet, weil sich Witzworter Bürgerinnen und Bürger aktiv für ihr Dorf einbringen wollten. Seitdem ist sie fester Bestandteil der Gemeinde – als Verein und als Fraktion.</p>
+      </div>
+      <div class="raster raster--2 saeulen">
+        <article class="karte saeule">
+          <span class="saeule__label">Der Verein</span>
+          <h3>Dorfleben pflegen und zusammenhalten</h3>
+          <p>Ein Zusammenschluss von Dorfbewohnern, die den Sinn ihres Lebens nicht zwangsläufig in der Politik suchen. Verwurzelt in Familie, Gemeinschaft und den Vereinen der Gemeinde wollen wir den dörflichen Charakter erhalten – mit Angeboten für alle, ob Mitglied oder nicht.</p>
+          <ul class="liste-haken">
+            <li>Witzworter Weihnachtsmarkt mit Tannenbaumverkauf</li>
+            <li>Ausflug zur Tolk-Schau mit den Kleinsten des Dorfes</li>
+            <li>Gemeinsames Dorfgrillen</li>
+          </ul>
+          <a class="pfeil" href={u('/verein/')}>Zum Verein</a>
+        </article>
+        <article class="karte saeule saeule--dunkel">
+          <span class="saeule__label">Die Fraktion</span>
+          <h3>Kommunalpolitik mit Sachverstand</h3>
+          <p>Wir möchten alle Menschen, unabhängig ihrer politischen Orientierung, in unsere kommunalpolitische Arbeit einbinden. Neutral und unabhängig von herkömmlichen Parteien, konstruktiv und mit kritischem Blick für das Notwendige und Machbare.</p>
+          <ul class="liste-haken">
+            <li>Seit Gründung ohne Unterbrechung politische Mehrheit</li>
+            <li>Stellt den Bürgermeister der Gemeinde</li>
+            <li>Arbeitet ohne Fraktionszwang</li>
+          </ul>
+          <a class="pfeil" href={u('/fraktion/')}>Zur Fraktion</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--sand" id="aktuelles">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <div>
+          <p class="eyebrow">Aktuelles</p>
+          <h2>Neues von der WGW</h2>
+        </div>
+        <a class="pfeil" href={SITE.instagram.url} target="_blank" rel="noopener">@{SITE.instagram.name} auf Instagram</a>
+      </div>
+      <Instagram />
+    </div>
+  </section>
+
+  <section class="abschnitt">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <div>
+          <p class="eyebrow">Unser Programm</p>
+          <h2>Dafür steht die WGW</h2>
+        </div>
+        <a class="pfeil" href={u('/programm/')}>Ganzes Programm lesen</a>
+      </div>
+      <div class="raster raster--3">
+        {themen.map((t) => (
+          <a class="thema" href={u(`/programm/#${t.anker}`)}>
+            <span class="thema__nr">{t.nr}</span>
+            <h3>{t.titel}</h3>
+            <p>{t.text}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--sand">
+    <div class="wrap">
+      <div class="kopfzeile">
+        <div>
+          <p class="eyebrow">Rückblick</p>
+          <h2>Aus Verein und Fraktion</h2>
+        </div>
+        <a class="pfeil" href={u('/aktuelles/')}>Alle Berichte</a>
+      </div>
+      <div class="raster raster--3">
+        {berichte.map((b) => <BerichtKarte bericht={b} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="abschnitt abschnitt--dunkel cta">
+    <div class="wrap cta__innen">
+      <div>
+        <h2>Du hast uns gerade noch gefehlt.</h2>
+        <p>Je mehr Mitglieder mitmachen, desto vielfältiger sind unsere Möglichkeiten. Wir freuen uns über unverbindliches Interesse, nette Gespräche, Anregungen – und über jedes neue Mitglied.</p>
+      </div>
+      <div class="cta__aktionen">
+        <a class="btn" href={u('/mitglied-werden/')}>Mitglied werden</a>
+        <a class="btn btn--linie-hell" href={u('/team/')}>Ansprechpartner</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; isolation: isolate; color: #fff; min-height: min(82vh, 720px); display: grid; align-items: end; }
+  .hero :global(.hero__bild) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; z-index: -2; }
+  .hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgb(21 24 29 / 0.15) 0%, rgb(21 24 29 / 0.45) 45%, rgb(21 24 29 / 0.86) 100%); }
+  .hero__inhalt { padding-block: clamp(6rem, 16vw, 11rem) clamp(3rem, 7vw, 5rem); }
+  .hero .eyebrow { color: #fff; }
+  .hero h1 { color: #fff; max-width: 14ch; margin-bottom: 0.4em; }
+  .hero__lead { font-size: clamp(1.1rem, 1.7vw, 1.35rem); max-width: 52ch; color: rgb(255 255 255 / 0.92); margin-bottom: 1.8rem; }
+  .hero__aktionen, .cta__aktionen { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+
+  .zahlen { background: var(--rot); color: #fff; }
+  .zahlen__raster { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .zahlen__raster div { padding: 1.6rem 1.2rem; display: grid; gap: 0.1rem; border-left: 1px solid rgb(255 255 255 / 0.22); }
+  .zahlen__raster div:first-child { border-left: 0; padding-left: 0; }
+  .zahlen strong { font-family: var(--kopf); font-size: clamp(1.6rem, 3.2vw, 2.4rem); font-weight: 750; line-height: 1.05; letter-spacing: -0.02em; }
+  .zahlen span { font-size: 0.92rem; opacity: 0.9; }
+  @media (max-width: 720px) {
+    .zahlen__raster { grid-template-columns: 1fr 1fr; }
+    .zahlen__raster div { padding-left: 0; border-left: 0; }
+    .zahlen__raster div:nth-child(n + 3) { border-top: 1px solid rgb(255 255 255 / 0.22); }
+  }
+
+  .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 4rem; margin-bottom: 2.8rem; align-items: start; }
+  .intro h2 { margin: 0; }
+  @media (max-width: 820px) { .intro { grid-template-columns: 1fr; } }
+  .saeulen { gap: 1.5rem; }
+  .saeule { display: flex; flex-direction: column; gap: 0.3rem; padding: clamp(1.6rem, 3.5vw, 2.6rem); }
+  .saeule__label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rot); margin-bottom: 0.4rem; }
+  .saeule h3 { font-size: clamp(1.4rem, 2.3vw, 1.75rem); }
+  .saeule .liste-haken { margin: 0.4rem 0 1.6rem; }
+  .saeule .pfeil { margin-top: auto; }
+  .saeule--dunkel { background: var(--tinte); border-color: var(--tinte); color: #d0d3da; }
+  .saeule--dunkel h3 { color: #fff; }
+  .saeule--dunkel .saeule__label { color: #ff8a8e; }
+  .saeule--dunkel .pfeil { color: #fff; }
+
+  .thema { display: block; padding: 1.8rem; border-radius: var(--radius); border: 1px solid var(--linie); text-decoration: none; color: inherit; transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s; }
+  .thema:hover { border-color: var(--rot); box-shadow: var(--schatten); transform: translateY(-2px); color: inherit; }
+  .thema__nr { font-family: var(--kopf); font-weight: 750; font-size: 2.6rem; line-height: 1; color: var(--rot); display: block; margin-bottom: 1.2rem; }
+  .thema p { color: var(--grau); margin: 0; }
+
+  .cta__innen { display: grid; grid-template-columns: 1.5fr auto; gap: 2rem 4rem; align-items: center; }
+  .cta h2 { margin-bottom: 0.4em; }
+  .cta p { max-width: 58ch; margin: 0; }
+  @media (max-width: 820px) { .cta__innen { grid-template-columns: 1fr; } }
+</style>
