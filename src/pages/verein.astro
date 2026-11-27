@@ -22,7 +22,7 @@ const traditionen = [
 ---
 
 <Base title="Unser Verein" description="Der Verein der Wählergemeinschaft Witzwort: Dorfleben pflegen, zusammenhalten, gemeinsam füreinander einstehen.">
-  <Seitenkopf eyebrow="Der Verein" title="Dorfleben zum Leben erwecken" lead="Der Verein der WGW ist ein Zusammenschluss von Dorfbewohnern, die den Sinn ihres Lebens nicht zwangsläufig in der Politik suchen – sondern in Familie, Gemeinschaft und den Vereinen der Gemeinde." />
+  <Seitenkopf sig="verein" ausschnitt="58% 38%" title="Dorfleben zum Leben erwecken" lead="Der Verein der WGW ist ein Zusammenschluss von Dorfbewohnern, die den Sinn ihres Lebens nicht zwangsläufig in der Politik suchen – sondern in Familie, Gemeinschaft und den Vereinen der Gemeinde." />
 
   <section class="abschnitt">
     <div class="wrap zwei">
@@ -40,15 +40,14 @@ const traditionen = [
     </div>
   </section>
 
-  <section class="abschnitt abschnitt--sand">
+  <section class="abschnitt abschnitt--marsch">
     <div class="wrap">
-      <p class="eyebrow">Für alle im Dorf</p>
-      <h2>Drei Traditionen</h2>
+      <h2>Drei Traditionen für alle im Dorf</h2>
       <div class="raster raster--3" style="margin-top:2rem">
         {traditionen.map((t) => (
-          <article class="karte">
-            <p class="wann">{t.wann}</p>
+          <article class="feld">
             <h3>{t.titel}</h3>
+            <p class="wann etikett">{t.wann}</p>
             <p>{t.text}</p>
           </article>
         ))}
@@ -60,7 +59,6 @@ const traditionen = [
     <div class="wrap">
       <div class="kopfzeile">
         <div>
-          <p class="eyebrow">Vereinsvorstand</p>
           <h2>Eure Ansprechpartner im Verein</h2>
         </div>
         <a class="pfeil" href={u('/team/')}>Ganzes Team</a>
@@ -71,11 +69,10 @@ const traditionen = [
     </div>
   </section>
 
-  <section class="abschnitt abschnitt--sand">
+  <section class="abschnitt abschnitt--marsch">
     <div class="wrap">
       <div class="kopfzeile">
         <div>
-          <p class="eyebrow">Aus dem Vereinsleben</p>
           <h2>Berichte und Rückblicke</h2>
         </div>
         <a class="pfeil" href={u('/aktuelles/')}>Alle Berichte</a>
@@ -91,7 +88,7 @@ const traditionen = [
   .zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem clamp(2rem, 6vw, 5rem); align-items: center; }
   @media (max-width: 860px) { .zwei { grid-template-columns: 1fr; } }
   figure { margin: 0; }
-  figure :global(img) { border-radius: var(--radius); width: 100%; }
-  figcaption { font-size: 0.88rem; color: var(--grau); margin-top: 0.6rem; }
-  .wann { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--rot); margin-bottom: 0.6rem; }
+  figure :global(img) { border: var(--linie) solid var(--tinte); width: 100%; }
+  figcaption { font-size: 0.88rem; color: var(--tinte-weich); margin-top: 0.6rem; }
+  .wann { color: var(--rot-tief); margin-top: 0.4rem; }
 </style>

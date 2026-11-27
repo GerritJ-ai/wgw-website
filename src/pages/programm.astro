@@ -9,7 +9,7 @@ import { u } from '../lib/site';
 
 const kapitel = [
   {
-    id: 'grundsaetzliches', nr: '01', titel: 'Grundsätzliches', bild: bild1,
+    id: 'grundsaetzliches', titel: 'Grundsätzliches', bild: bild1,
     unter: 'Unsere Prinzipien – unmissverständlich und unverwechselbar',
     intro: 'Die WGW ist ein Zusammenschluss von Bürgerinnen und Bürgern, die neutral und unabhängig von herkömmlichen Parteien handeln und entscheiden – und die den Sinn ihres Lebens nicht ausschließlich in der Politik suchen, sondern auch in ihren Familien, in den Vereinen und Organisationen unserer Gemeinde verwurzelt sind.',
     punkte: [
@@ -21,7 +21,7 @@ const kapitel = [
     ],
   },
   {
-    id: 'familie', nr: '02', titel: 'Familie und Vereine', bild: bild2,
+    id: 'familie', titel: 'Familie und Vereine', bild: bild2,
     unter: 'Die Familie und unsere Kinder sind unsere Zukunft – unsere Vereine sind das Herz unseres Dorfes',
     intro: 'Aus diesem Grund wollen wir bisher Erreichtes weiterhin fördern.',
     punkte: [
@@ -36,7 +36,7 @@ const kapitel = [
     ],
   },
   {
-    id: 'umwelt', nr: '03', titel: 'Umwelt und Zukunft', bild: bild3,
+    id: 'umwelt', titel: 'Umwelt und Zukunft', bild: bild3,
     unter: 'Die Nachhaltigkeit unserer Natur erhalten und schützen – sicher in die Zukunft: für Witzwort neue Wege gehen',
     intro: '',
     punkte: [
@@ -52,24 +52,23 @@ const kapitel = [
 ---
 
 <Base title="Unser Programm" description="Dafür steht die Wählergemeinschaft Witzwort: unsere Grundsätze, Familie und Vereine, Umwelt und Zukunft.">
-  <Seitenkopf eyebrow="Unser Programm · Update 2023" title="Dafür steht die Wählergemeinschaft Witzwort" lead="Drei Themenfelder, ein Anspruch: konstruktiv, unabhängig und immer am Wohl der Gemeinde ausgerichtet.">
+  <Seitenkopf sig="programm" ausschnitt="48% 70%" title="Dafür steht die Wählergemeinschaft Witzwort" lead="Drei Themenfelder, ein Anspruch: konstruktiv, unabhängig und immer am Wohl der Gemeinde ausgerichtet. Stand: Update 2023.">
     <nav class="sprung" aria-label="Themen">
-      {kapitel.map((k) => <a href={`#${k.id}`}>{k.nr} · {k.titel}</a>)}
+      {kapitel.map((k) => <a href={`#${k.id}`}>{k.titel}</a>)}
     </nav>
   </Seitenkopf>
 
   {kapitel.map((k, i) => (
-    <section class:list={['abschnitt', { 'abschnitt--sand': i % 2 === 1 }]} id={k.id}>
+    <section class:list={['abschnitt', { 'abschnitt--marsch': i % 2 === 1 }]} id={k.id}>
       <div class="wrap kap">
         <div class="kap__kopf">
-          <span class="kap__nr">{k.nr}</span>
           <h2>{k.titel}</h2>
           <p class="kap__unter">{k.unter}</p>
           <Image src={k.bild} alt="" width={720} height={420} fit="cover" />
         </div>
         <div>
           {k.intro && <p class="lead">{k.intro}</p>}
-          <ul class="liste-haken">
+          <ul class="liste-punkt">
             {k.punkte.map((p) => <li>{p}</li>)}
           </ul>
         </div>
@@ -77,7 +76,7 @@ const kapitel = [
     </section>
   ))}
 
-  <section class="abschnitt abschnitt--dunkel">
+  <section class="abschnitt abschnitt--forst">
     <div class="schmal" style="text-align:center">
       <h2>Anregungen? Sprich uns an.</h2>
       <p>Die WGW wünscht sich eine intensive Bürgerbeteiligung – wir haben ein offenes Ohr für Sorgen, Nöte und Ideen.</p>
@@ -88,15 +87,14 @@ const kapitel = [
 
 <style>
   .sprung { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.8rem; }
-  .sprung a { text-decoration: none; font-weight: 600; font-size: 0.95rem; padding: 0.5em 1em; border-radius: 999px; background: #fff; border: 1px solid var(--linie); color: var(--tinte); }
-  .sprung a:hover { border-color: var(--rot); color: var(--rot-dunkel); }
+  .sprung a { text-decoration: none; font-weight: 600; font-size: 0.95rem; padding: 0.5em 1em; background: var(--blatt); border: var(--linie) solid var(--tinte); color: var(--tinte); }
+  .sprung a:hover { background: var(--tinte); color: #fff; }
   section[id] { scroll-margin-top: 4.6rem; }
   .kap { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 2.5rem clamp(2rem, 6vw, 5rem); align-items: start; }
   .kap__kopf { position: sticky; top: 6.5rem; }
-  .kap__nr { font-family: var(--kopf); font-weight: 750; font-size: 3.2rem; line-height: 1; color: var(--rot); display: block; margin-bottom: 0.8rem; }
   .kap__unter { font-weight: 600; color: var(--tinte); }
-  .kap__kopf :global(img) { border-radius: var(--radius); margin-top: 1.4rem; width: 100%; }
-  .liste-haken { gap: 1.1rem; }
+  .kap__kopf :global(img) { border: var(--linie) solid var(--tinte); margin-top: 1.4rem; width: 100%; }
+  .liste-punkt { gap: 1.1rem; }
   .lead { margin-bottom: 1.6rem; }
   @media (max-width: 820px) { .kap { grid-template-columns: 1fr; } .kap__kopf { position: static; } }
 </style>

@@ -2,34 +2,48 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { u, datum } from '../lib/site';
-interface Props { bericht: CollectionEntry<'berichte'> }
-const { bericht } = Astro.props;
+interface Props {
+  bericht: CollectionEntry<'berichte'>;
+  gross?: boolean;
+}
+const { bericht, gross = false } = Astro.props;
 const { title, date, bereich, cover, teaser } = bericht.data;
 ---
-<article class="bk">
+
+<article class:list={['bk', { 'bk--gross': gross, 'bk--ohne': !cover }]}>
   <a href={u(`/aktuelles/${bericht.id}/`)} class="bk__link">
-    <div class="bk__bild">
-      {cover ? <Image src={cover} alt="" width={640} height={420} fit="cover" position="top" /> : <div class="bk__leer" aria-hidden="true">WGW</div>}
-    </div>
+    {cover && (
+      <div class="bk__bild">
+        <Image src={cover} alt="" width={gross ? 900 : 640} height={gross ? 600 : 420} fit="cover" position="top" loading={gross ? 'eager' : 'lazy'} />
+      </div>
+    )}
     <div class="bk__text">
-      <p class="bk__meta"><span class={`chip chip--${bereich}`}>{bereich === 'verein' ? 'Verein' : 'Fraktion'}</span><time datetime={date.toISOString().slice(0, 10)}>{datum(date)}</time></p>
+      <p class="bk__meta etikett">
+        <i class={`sig sig--${bereich}`} aria-hidden="true"></i>
+        <span>{bereich === 'verein' ? 'Verein' : 'Fraktion'}</span>
+        <time datetime={date.toISOString().slice(0, 10)}>{datum(date)}</time>
+      </p>
       <h3>{title}</h3>
       {teaser && <p class="bk__teaser">{teaser}</p>}
     </div>
   </a>
 </article>
+
 <style>
-  .bk { background: #fff; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; }
-  .bk:hover { box-shadow: var(--schatten); transform: translateY(-2px); }
+  .bk { background: var(--blatt); border: var(--linie) solid var(--tinte); }
   .bk__link { display: grid; grid-template-rows: auto 1fr; height: 100%; color: inherit; text-decoration: none; }
-  .bk__bild { aspect-ratio: 16 / 10; background: var(--sand); overflow: hidden; }
-  .bk__bild img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-  .bk__leer { height: 100%; display: grid; place-items: center; font-family: var(--kopf); font-weight: 800; font-size: 2rem; color: var(--sand-dunkel); }
-  .bk__text { padding: 1.2rem 1.3rem 1.4rem; }
-  .bk__meta { display: flex; align-items: center; gap: 0.7rem; font-size: 0.85rem; color: var(--grau); margin-bottom: 0.6rem; }
-  .chip { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.25em 0.7em; border-radius: 999px; }
-  .chip--verein { background: var(--rot-hell); color: var(--rot-dunkel); }
-  .chip--fraktion { background: var(--tinte); color: #fff; }
-  h3 { font-size: 1.18rem; margin-bottom: 0.4rem; }
-  .bk__teaser { font-size: 0.95rem; color: var(--grau); margin: 0; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .bk__bild { aspect-ratio: 16 / 10; background: var(--wiese); overflow: hidden; border-bottom: var(--linie) solid var(--tinte); }
+  .bk__bild img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: transform 0.6s var(--aus); }
+  .bk__link:hover .bk__bild img, .bk__link:focus-visible .bk__bild img { transform: scale(1.035); }
+  .bk__text { padding: 1.15rem 1.3rem 1.4rem; }
+  .bk__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.6rem; margin-bottom: 0.7rem; }
+  .bk__meta time { margin-left: auto; color: var(--tinte-weich); }
+  h3 { font-size: 1.22rem; margin-bottom: 0.4rem; transition: color 0.18s var(--aus); }
+  .bk__link:hover h3 { color: var(--rot-tief); }
+  .bk__teaser { font-size: 0.96rem; color: var(--tinte-weich); margin: 0; display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .bk--gross h3 { font-size: clamp(1.5rem, 2.6vw, 2.1rem); }
+  .bk--gross .bk__link { grid-template-rows: 1fr auto; }
+  .bk--gross .bk__bild { aspect-ratio: auto; min-height: clamp(240px, 34vw, 420px); }
+  .bk--gross .bk__text { padding: 1.5rem 1.6rem 1.8rem; }
+  .bk--ohne .bk__link { grid-template-rows: 1fr; }
 </style>

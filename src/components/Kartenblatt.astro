@@ -1,0 +1,206 @@
+---
+// Erste Ansicht der Startseite: das Kartenblatt von Witzwort.
+// Geometrie: public/karte/witzwort.svg (scripts/karte.mjs, OpenStreetMap).
+// Positionen in Prozent des Blatts; Lage der Orte laut OpenStreetMap.
+import karte from '../data/karte.json';
+import { SITE, u } from '../lib/site';
+
+type Ort = {
+  name: string;
+  x: number; y: number;      // Lage des Punkts
+  lx: number; ly: number;    // Anker des Etiketts
+  seite: 'l' | 'r';          // Etikett links oder rechts vom Anker
+  g?: string;                // Gruppen der Zeichenerklärung
+  href?: string;
+  hinweis?: string;
+};
+
+const orte: Ort[] = [
+  { name: 'Feuerwehr', x: 65.29, y: 46.59, lx: 61.2, ly: 43.2, seite: 'l', g: 'programm', href: '/programm/#familie', hinweis: 'Programm: Förderung der Freiwilligen Feuerwehr' },
+  { name: 'Dörpshuus', x: 67.72, y: 50.14, lx: 74, ly: 45.6, seite: 'r', g: 'verein fraktion', href: '/verein/', hinweis: 'Versammlungen von Verein und Fraktion' },
+  { name: 'Schule und Kita', x: 67.95, y: 52.81, lx: 74.6, ly: 53.8, seite: 'r', g: 'programm', href: '/programm/#familie', hinweis: 'Programm: Schulstandort und Kindertagesstätte sichern' },
+  { name: 'Markttreff', x: 66.21, y: 51.75, lx: 74.3, ly: 49.7, seite: 'r', g: 'programm', href: '/programm/#familie', hinweis: 'Programm: Nahversorgung im Ort erhalten' },
+  { name: 'Meierei', x: 62.76, y: 64.3, lx: 66, ly: 66.4, seite: 'r', g: 'programm', href: '/programm/#umwelt', hinweis: 'Programm: wichtiger Arbeitgeber im Ort' },
+];
+const marken = [
+  { name: 'St. Marien', x: 66.71, y: 50.7, lx: 60.6, ly: 48.3, seite: 'l' },
+  { name: 'Windmühle Catharina', x: 56.44, y: 79.14, lx: 57.7, ly: 79.14, seite: 'r' },
+  { name: 'Hp Witzwort', x: 81.47, y: 82.27, lx: 82.8, ly: 82.27, seite: 'r' },
+];
+
+const legende = [
+  { g: 'aktuelles', label: 'Aktuelles', text: 'Neues von Instagram und aus dem Archiv', href: '/aktuelles/' },
+  { g: 'verein', label: 'Verein', text: 'Weihnachtsmarkt, Tolk-Schau, Dorfgrillen', href: '/verein/' },
+  { g: 'fraktion', label: 'Fraktion', text: '7 von 11 Sitzen im Gemeinderat', href: '/fraktion/' },
+  { g: 'programm', label: 'Programm', text: 'Wofür wir uns einsetzen', href: '/programm/' },
+];
+
+const grad = (v: number, r: string) => {
+  const g = Math.floor(v);
+  const m = ((v - g) * 60).toFixed(1).replace('.', ',');
+  return `${g}°${m}′ ${r}`;
+};
+const massstab = (0.5 / karte.breiteKm) * 100; // 500 m in Prozent der Blattbreite
+---
+
+<section class="blatt" style={`--m500:${massstab.toFixed(3)}`}>
+  <div class="blatt__feld">
+    <div class="karte">
+      <img src={u('/karte/witzwort.svg')} alt="Karte der Gemeinde Witzwort mit Gräben, Wegen, Höfen und Bahnlinie" width={karte.breite} height={karte.hoehe} fetchpriority="high" />
+      <svg class="karte__linien" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {[...orte, ...marken].map((o, i) => <line x1={o.x} y1={o.y} x2={o.lx} y2={o.ly} pathLength="1" style={`--i:${i}`} />)}
+      </svg>
+      <span class="karte__ort" style="left:66.6%;top:38.7%" aria-hidden="true">Witzwort</span>
+      <span class="karte__wasser" style="left:36.2%;top:41.1%" aria-hidden="true">Uelvesbüll-Witzworter Sielzug</span>
+      {marken.map((o) => (
+        <>
+          <i class="punkt punkt--neutral" style={`left:${o.x}%;top:${o.y}%`} aria-hidden="true" />
+          <span class:list={['karte__name', `ist-${o.seite}`]} style={`left:${o.lx}%;top:${o.ly}%`} aria-hidden="true">{o.name}</span>
+        </>
+      ))}
+      <ul class="karte__orte" aria-label="Orte der WGW auf der Karte">
+        {orte.map((o, i) => (
+          <li data-g={o.g} style={`--i:${i}`}>
+            <i class:list={['punkt', ...o.g!.split(' ').map((g) => `punkt--${g}`)]} style={`left:${o.x}%;top:${o.y}%`} aria-hidden="true" />
+            <a class:list={['karte__marke', `ist-${o.seite}`]} href={u(o.href!)} style={`left:${o.lx}%;top:${o.ly}%`} title={o.hinweis}>{o.name}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+
+  <div class="blatt__rand" aria-hidden="true">
+    <span class="g g--nw">{grad(karte.blatt.n, 'N')}</span>
+    <span class="g g--no">{grad(karte.blatt.e, 'O')}</span>
+  </div>
+
+  <div class="wrap blatt__inhalt">
+    <div class="titelfeld feld">
+      <h1>Für unsere Gemeinde machen wir uns stark.</h1>
+      <p>Moin moin! Seit 1978 setzt sich die Wählergemeinschaft Witzwort für das Dorf ein, als Verein und als Fraktion im Gemeinderat.</p>
+      <div class="titelfeld__aktionen">
+        <a class="btn" href={u('/mitglied-werden/')}>Mitglied werden</a>
+        <a class="pfeil" href="#aktuelles">Was gerade los ist</a>
+      </div>
+    </div>
+
+    <nav class="legende feld" aria-label="Zeichenerklärung">
+      <h2 class="etikett">Zeichenerklärung</h2>
+      <ul>
+        {legende.map((l) => (
+          <li>
+            <a href={u(l.href)} data-g={l.g}>
+              <i class={`sig sig--${l.g}`} aria-hidden="true" />
+              <span><b>{l.label}</b><small>{l.text}</small></span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+
+  <div class="randzeile">
+    <div class="wrap randzeile__innen etikett">
+      <span>Blatt Witzwort</span>
+      <span>Gegründet 1978</span>
+      <span>66 Mitglieder (2023)</span>
+      <span>7 von 11 Sitzen im Gemeinderat</span>
+      <span class="massstab"><i aria-hidden="true"></i>500 m</span>
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap-Mitwirkende</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .blatt {
+    --hh: clamp(600px, calc(100svh - 7.6rem), 860px);
+    --wc: max(108vw, calc(var(--hh) * 1.51));
+    --tx: 66%;
+    --ty: 37%;
+    position: relative; isolation: isolate;
+    background: var(--marsch);
+    display: grid; grid-template-rows: minmax(var(--hh), auto) auto;
+  }
+  .blatt__feld { position: absolute; inset: 0 0 auto 0; height: var(--hh); overflow: hidden; z-index: -1; }
+  .karte { position: absolute; left: var(--tx); top: var(--ty); width: var(--wc); aspect-ratio: 2000 / 1680; transform: translate(-68.5%, -51%); }
+  .karte img { width: 100%; height: 100%; }
+  .karte__linien { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .karte__linien line { stroke: var(--tinte); stroke-width: 0.085; stroke-dasharray: 1; }
+
+  .karte__ort, .karte__wasser, .karte__name, .karte__marke { position: absolute; white-space: nowrap; line-height: 1.1; }
+  .karte__ort { transform: translate(-50%, -50%); font-family: var(--titel); font-weight: 800; font-size: clamp(1.25rem, 2.1vw, 1.9rem); letter-spacing: 0.34em; text-transform: uppercase; color: var(--tinte); text-shadow: 0 0 0 var(--marsch), 2px 0 var(--marsch), -2px 0 var(--marsch), 0 2px var(--marsch), 0 -2px var(--marsch); }
+  .karte__wasser { transform: translate(-50%, -50%) rotate(22.8deg) skewX(14deg); font-family: var(--titel); font-style: italic; font-weight: 500; font-size: 0.84rem; letter-spacing: 0.08em; color: var(--wasser-tief); text-shadow: 1.5px 0 var(--marsch), -1.5px 0 var(--marsch), 0 1.5px var(--marsch), 0 -1.5px var(--marsch); }
+  .karte__name { font-stretch: 78%; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.03em; color: var(--tinte); padding: 0.1em 0.35em; background: var(--marsch); transform: translateY(-50%); }
+  .karte__name.ist-l, .karte__marke.ist-l { transform: translate(-100%, -50%); }
+  .karte__orte { list-style: none; margin: 0; padding: 0; }
+  .karte__orte li { transition: opacity 0.25s var(--aus); }
+  .karte__marke {
+    transform: translateY(-50%);
+    font-stretch: 82%; font-weight: 700; font-size: clamp(0.88rem, 1.05vw, 1rem); letter-spacing: 0.02em;
+    background: var(--rot); color: #fff; text-decoration: none; padding: 0.34em 0.62em 0.3em;
+    border: var(--linie) solid var(--tinte);
+    transition: background 0.18s var(--aus);
+  }
+  .karte__marke:hover, .karte__marke:focus-visible { background: var(--tinte); color: #fff; }
+
+  .punkt { position: absolute; width: 15px; height: 15px; transform: translate(-50%, -50%); background: var(--rot); border: 2px solid var(--blatt); outline: 1.5px solid var(--tinte); }
+  .punkt--verein { border-radius: 50%; }
+  .punkt--programm { transform: translate(-50%, -50%) rotate(45deg); width: 13px; height: 13px; }
+  .punkt--fraktion.punkt--verein { border-radius: 50%; background: radial-gradient(var(--tinte) 0 32%, var(--rot) 34%); }
+  .punkt--neutral { width: 8px; height: 8px; background: var(--tinte); border: 0; outline: 2px solid var(--marsch); border-radius: 50%; }
+
+  /* Ein Eintrag der Zeichenerklärung hebt seine Orte hervor */
+  .blatt:has(.legende a[data-g='verein']:is(:hover, :focus-visible)) .karte__orte li:not([data-g~='verein']),
+  .blatt:has(.legende a[data-g='fraktion']:is(:hover, :focus-visible)) .karte__orte li:not([data-g~='fraktion']),
+  .blatt:has(.legende a[data-g='programm']:is(:hover, :focus-visible)) .karte__orte li:not([data-g~='programm']) { opacity: 0.22; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Linien werden gezeichnet; Marken und Etiketten stehen von Anfang an */
+    .karte__linien line { animation: ziehen 0.55s var(--aus) backwards; animation-delay: calc(0.1s + var(--i) * 0.05s); }
+    @keyframes ziehen { from { stroke-dashoffset: 1; } }
+  }
+
+  .blatt__rand { position: absolute; inset: 12px 12px auto 12px; height: calc(var(--hh) - 12px); border: var(--linie) solid var(--tinte); border-bottom: 0; pointer-events: none; }
+  .blatt__rand::after { content: ''; position: absolute; inset: 5px 5px 0 5px; border: 1px solid var(--tinte); border-bottom: 0; }
+  .g { position: absolute; top: 14px; font-stretch: 78%; font-size: 0.74rem; font-weight: 600; letter-spacing: 0.06em; background: var(--marsch); padding: 0.1em 0.4em; }
+  .g--nw { left: 14px; }
+  .g--no { right: 14px; }
+
+  .blatt__inhalt { align-self: end; display: grid; grid-template-columns: minmax(0, 37rem) minmax(0, 19rem); justify-content: space-between; align-items: end; gap: 1.5rem; padding-block: 2rem clamp(1.6rem, 3.5vw, 2.6rem); }
+  .titelfeld { padding: clamp(1.5rem, 3vw, 2.4rem); }
+  .titelfeld h1 { font-size: clamp(2.15rem, 4.5vw, 3.7rem); margin-bottom: 0.38em; }
+  .titelfeld p { font-size: clamp(1.05rem, 1.4vw, 1.2rem); line-height: 1.5; max-width: 34em; margin-bottom: 1.4rem; }
+  .titelfeld__aktionen { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; }
+
+  .legende { padding: 1.1rem 1.3rem 0.5rem; }
+  .legende h2 { font-family: var(--lauf); margin: 0 0 0.5rem; color: var(--tinte-weich); }
+  .legende ul { list-style: none; margin: 0; padding: 0; }
+  .legende li + li { border-top: 1px solid var(--tinte); }
+  .legende a { display: flex; align-items: center; gap: 0.95rem; padding: 0.68rem 0; text-decoration: none; color: var(--tinte); }
+  .legende .sig { font-size: 1.15rem; }
+  .legende b { display: block; font-family: var(--titel); font-weight: 700; font-size: 1.18rem; line-height: 1.15; }
+  .legende small { display: block; font-size: 0.86rem; color: var(--tinte-weich); line-height: 1.3; }
+  .legende a:hover b, .legende a:focus-visible b { color: var(--rot-tief); }
+
+  .randzeile { background: var(--blatt); border-block: var(--linie) solid var(--tinte); }
+  .randzeile__innen { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 2rem; padding-block: 0.7rem; color: var(--tinte); }
+  .randzeile a { color: inherit; margin-left: auto; }
+  .massstab { display: inline-flex; align-items: center; gap: 0.6rem; }
+  .massstab i { display: block; width: calc(var(--wc) * var(--m500) / 100); height: 7px; border: 1.5px solid var(--tinte); background: linear-gradient(90deg, var(--tinte) 50%, transparent 0); }
+
+  @media (max-width: 860px) {
+    .blatt { --hh: 446px; --wc: 1180px; --tx: 47%; --ty: 50%; display: block; padding-top: var(--hh); }
+    .blatt__inhalt { grid-template-columns: 1fr; width: 100%; padding: 0; gap: 0; background: var(--blatt); border-top: var(--linie) solid var(--tinte); }
+    .titelfeld, .legende { border: 0; padding-inline: 1.25rem; }
+    .titelfeld { padding-block: 1.1rem 1.2rem; }
+    .titelfeld h1 { font-size: 2rem; }
+    .titelfeld p { margin-bottom: 1rem; font-size: 1.02rem; }
+    .legende { border-top: var(--linie) solid var(--tinte); padding-block: 1.1rem 0.4rem; }
+    .legende ul { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1.2rem; }
+    .legende li:nth-child(2) { border-top: 0; }
+    .legende small { display: none; }
+    .blatt__rand { inset: 8px 8px auto 8px; height: calc(var(--hh) - 8px); }
+    .g { font-size: 0.68rem; top: 10px; }
+    .randzeile a { margin-left: 0; }
+  }
+</style>

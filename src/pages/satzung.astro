@@ -9,7 +9,7 @@ const seiten = [s1, s2, s3];
 ---
 
 <Base title="Satzung" description="Die Satzung der Wählergemeinschaft Witzwort, Stand 29.11.2018.">
-  <Seitenkopf eyebrow="Unser Verein" title="Die Satzung der Wählergemeinschaft Witzwort" lead="Stand: 29. November 2018" />
+  <Seitenkopf ausschnitt="10% 85%" title="Die Satzung der Wählergemeinschaft Witzwort" lead="Stand: 29. November 2018" />
   <section class="abschnitt">
     <div class="schmal seiten">
       {seiten.map((s, i) => (
@@ -23,6 +23,6 @@ const seiten = [s1, s2, s3];
 
 <style>
   .seiten { display: grid; gap: 2rem; }
-  .seiten a { display: block; border: 1px solid var(--linie); border-radius: 6px; overflow: hidden; box-shadow: var(--schatten); }
+  .seiten a { display: block; border: var(--linie) solid var(--tinte); overflow: hidden; }
   .seiten :global(img) { width: 100%; }
 </style>

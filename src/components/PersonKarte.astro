@@ -12,7 +12,7 @@ const { person } = Astro.props;
   <div class="pk__text">
     <h3>{person.name}</h3>
     <p class="pk__rolle">{person.rolle}</p>
-    <p class="pk__seit">Seit {person.seit} in der WGW</p>
+    <p class="pk__seit etikett">Seit {person.seit} in der WGW</p>
     <details>
       <summary>Ämter und Ausschüsse</summary>
       <dl>
@@ -28,15 +28,15 @@ const { person } = Astro.props;
 </article>
 
 <style>
-  .pk { background: #fff; border: 1px solid var(--linie); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
-  .pk img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top; background: var(--sand); }
-  .pk__text { padding: 1.2rem 1.3rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
+  .pk { background: var(--blatt); border: var(--linie) solid var(--tinte); display: flex; flex-direction: column; }
+  .pk img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top; background: var(--wiese); border-bottom: var(--linie) solid var(--tinte); }
+  .pk__text { padding: 1.1rem 1.25rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
   h3 { margin-bottom: 0.3rem; }
-  .pk__rolle { color: var(--rot-dunkel); font-weight: 600; font-size: 0.96rem; line-height: 1.4; margin-bottom: 0.5rem; }
-  .pk__seit { color: var(--grau); font-size: 0.9rem; margin-bottom: 0.9rem; }
-  details { margin-top: auto; border-top: 1px solid var(--linie); padding-top: 0.8rem; font-size: 0.92rem; }
-  summary { cursor: pointer; font-weight: 650; color: var(--tinte); }
+  .pk__rolle { color: var(--rot-tief); font-weight: 650; font-size: 0.97rem; line-height: 1.38; margin-bottom: 0.5rem; }
+  .pk__seit { color: var(--tinte-weich); margin-bottom: 0.9rem; }
+  details { margin-top: auto; border-top: 1px solid var(--tinte); padding-top: 0.75rem; font-size: 0.93rem; }
+  summary { cursor: pointer; font-weight: 650; }
   dl { margin: 0.8rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.9rem; }
-  dt { color: var(--grau); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  dt { color: var(--tinte-weich); white-space: nowrap; font-variant-numeric: tabular-nums; }
   dd { margin: 0; }
 </style>

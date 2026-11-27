@@ -1,0 +1,94 @@
+{
+  "blatt": {
+    "s": 54.378,
+    "w": 8.925,
+    "n": 54.422,
+    "e": 9.015
+  },
+  "breite": 2000,
+  "hoehe": 1680,
+  "breiteKm": 5.832,
+  "orte": [
+    {
+      "name": "Witzwort",
+      "art": "village",
+      "x": 68.49,
+      "y": 51.08
+    },
+    {
+      "name": "Witzwort",
+      "art": "halt",
+      "x": 81.47,
+      "y": 82.27
+    },
+    {
+      "name": "Grundschule Witzwort",
+      "art": "school",
+      "x": 67.95,
+      "y": 52.81
+    },
+    {
+      "name": "Kindertagesstätte Sonnenblume",
+      "art": "kindergarten",
+      "x": 67.83,
+      "y": 53.49
+    },
+    {
+      "name": "Weidenwarft",
+      "art": "isolated_dwelling",
+      "x": 62.02,
+      "y": 75.06
+    },
+    {
+      "name": "Smeerkrog",
+      "art": "restaurant",
+      "x": 3.89,
+      "y": 62.18
+    },
+    {
+      "name": "Porrendeich",
+      "art": "hamlet",
+      "x": 20.57,
+      "y": 0.92
+    },
+    {
+      "name": "Freiwillige Feuerwehr Witzwort",
+      "art": "fire_station",
+      "x": 65.29,
+      "y": 46.6
+    },
+    {
+      "name": "Sankt Marien",
+      "art": "place_of_worship",
+      "x": 66.71,
+      "y": 50.71
+    },
+    {
+      "name": "Bouleplatz Witzwort",
+      "art": "pitch",
+      "x": 69,
+      "y": 47.15
+    },
+    {
+      "name": "Reitplatz",
+      "art": "park",
+      "x": 70.57,
+      "y": 47.82
+    },
+    {
+      "name": "Rodelberg",
+      "art": "playground",
+      "x": 69.33,
+      "y": 47.11
+    }
+  ],
+  "gewaesser": [
+    "Eider",
+    "Witzworter Sielzug",
+    "Uelvesbüll-Witzworter-Sielzug",
+    "Reimersbude-Sielzug",
+    "Ostersielzug",
+    "Spreenfang-Sielzug",
+    "Spuitsieler Sielzug"
+  ]
+}

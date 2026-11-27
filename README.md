@@ -21,7 +21,8 @@ Danach im Browser `http://localhost:4321` öffnen. `npm run build` erzeugt die f
 | Programm | `src/pages/programm.astro` |
 | Berichte im Archiv | je eine Markdown-Datei in `src/content/berichte/` |
 | Beitrittserklärung (PDF) | `public/downloads/beitrittserklaerung-wgw.pdf` |
-| Farben und Schriften | `src/styles/global.css` |
+| Farben und Schriften | `src/styles/global.css`, Regeln in `DESIGN.md` |
+| Karte von Witzwort und markierte Orte | `scripts/karte.mjs` (erzeugt `public/karte/witzwort.svg` aus OpenStreetMap), Orte in `src/components/Kartenblatt.astro` |
 
 Ein neuer Bericht ist eine Datei `JJJJ-MM-TT-titel.md` mit diesem Kopf:
 
@@ -37,6 +38,12 @@ Text in Markdown …
 ```
 
 Aktuelle Neuigkeiten kommen aber in der Regel einfach über Instagram – dafür muss an der Website nichts geändert werden.
+
+## Gestaltung
+
+Die Seite ist als Kartenblatt der Marsch gestaltet („Die Marschkarte“). Produktbeschreibung und Gestaltungsregeln stehen in
+`PRODUCT.md` und `DESIGN.md`; sie werden vom Design-Skill [Impeccable](https://impeccable.style) gelesen, der unter
+`.claude/skills/impeccable` liegt. Die Karte neu erzeugen: `node scripts/karte.mjs --laden`.
 
 ## Instagram-Feed
 

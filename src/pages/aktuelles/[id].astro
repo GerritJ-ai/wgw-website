@@ -18,13 +18,14 @@ const { title, date, bereich, teaser } = bericht.data;
 
 <Base title={title} description={teaser}>
   <article>
-    <header class="seitenkopf">
+    <header class="kopf">
       <div class="schmal">
-        <p class="meta">
+        <h1>{title}</h1>
+        <p class="meta etikett">
+          <i class={`sig sig--${bereich}`} aria-hidden="true"></i>
           <a href={u(`/${bereich}/`)}>{bereich === 'verein' ? 'Verein' : 'Fraktion'}</a>
           <time datetime={date.toISOString().slice(0, 10)}>{datum(date)}</time>
         </p>
-        <h1>{title}</h1>
       </div>
     </header>
     <div class="schmal prosa inhalt">
@@ -40,14 +41,16 @@ const { title, date, bereich, teaser } = bericht.data;
 </Base>
 
 <style>
-  .seitenkopf h1 { max-width: none; font-size: clamp(1.9rem, 4.2vw, 3rem); }
-  .meta { display: flex; gap: 1rem; align-items: center; font-size: 0.9rem; color: var(--grau); margin-bottom: 1rem; }
-  .meta a { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; background: var(--rot); color: #fff; padding: 0.3em 0.8em; border-radius: 999px; }
+  .kopf { background: var(--marsch); border-bottom: var(--linie) solid var(--tinte); padding-block: clamp(2.4rem, 6vw, 4.2rem) clamp(1.8rem, 4vw, 2.6rem); }
+  .kopf h1 { font-size: clamp(1.95rem, 4.4vw, 3.2rem); margin-bottom: 0.5em; }
+  .meta { display: flex; flex-wrap: wrap; gap: 0.4rem 0.7rem; align-items: center; margin: 0; }
+  .meta a { color: var(--tinte); }
+  .meta time { margin-left: 0.6rem; color: var(--tinte-weich); }
   .inhalt { padding-block: clamp(2rem, 5vw, 3.5rem); }
   .inhalt :global(img) { margin-inline: auto; max-height: 85vh; width: auto; }
-  .blaettern { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid var(--linie); padding-top: 1.5rem; }
+  .blaettern { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: var(--linie) solid var(--tinte); padding-top: 1.5rem; }
   .blaettern a { text-decoration: none; color: var(--tinte); font-weight: 600; line-height: 1.35; }
-  .blaettern a span { display: block; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rot); margin-bottom: 0.2rem; }
+  .blaettern a span { display: block; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rot-tief); margin-bottom: 0.2rem; }
   .blaettern .rechts { text-align: right; }
   .zurueck { padding-block: 2rem 4rem; }
 </style>

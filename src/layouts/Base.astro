@@ -15,11 +15,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 const og = new URL(u('/og.jpg'), Astro.site);
 
 const nav = [
-  { href: '/aktuelles/', label: 'Aktuelles' },
-  { href: '/verein/', label: 'Verein' },
-  { href: '/fraktion/', label: 'Fraktion' },
-  { href: '/programm/', label: 'Programm' },
-  { href: '/team/', label: 'Team' },
+  { href: '/aktuelles/', label: 'Aktuelles', sig: 'aktuelles' },
+  { href: '/verein/', label: 'Verein', sig: 'verein' },
+  { href: '/fraktion/', label: 'Fraktion', sig: 'fraktion' },
+  { href: '/programm/', label: 'Programm', sig: 'programm' },
+  { href: '/team/', label: 'Team', sig: null },
 ];
 const pfad = Astro.url.pathname;
 const aktiv = (href: string) => pfad.startsWith(u(href));
@@ -35,7 +35,7 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/png" href={u('/favicon.png')} />
     <link rel="apple-touch-icon" href={u('/apple-touch-icon.png')} />
-    <meta name="theme-color" content="#c4161c" />
+    <meta name="theme-color" content="#dfe8cf" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="de_DE" />
     <meta property="og:site_name" content={SITE.name} />
@@ -50,18 +50,17 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
     <header class="kopf">
       <div class="wrap kopf__innen">
         <a class="marke" href={u('/')} aria-label={`${SITE.name} – Startseite`}>
-          <Image src={logo} alt="" width={52} height={51} loading="eager" />
-          <span class="marke__text">
-            <strong>Wählergemeinschaft</strong>
-            <span>Witzwort</span>
-          </span>
+          <Image src={logo} alt="" width={50} height={49} loading="eager" />
+          <span class="marke__text">Wählergemeinschaft <b>Witzwort</b></span>
         </a>
 
         <nav class="nav" aria-label="Hauptnavigation">
           <details class="nav__mobil">
             <summary><span class="sr-only">Menü</span><span class="burger" aria-hidden="true"></span></summary>
             <ul>
-              {nav.map((n) => <li><a href={u(n.href)} aria-current={aktiv(n.href) ? 'page' : undefined}>{n.label}</a></li>)}
+              {nav.map((n) => (
+                <li><a href={u(n.href)} aria-current={aktiv(n.href) ? 'page' : undefined}>{n.sig && <i class={`sig sig--${n.sig}`} />}{n.label}</a></li>
+              ))}
               <li><a class="btn" href={u('/mitglied-werden/')}>Mitglied werden</a></li>
             </ul>
           </details>
@@ -76,17 +75,18 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
     <main id="inhalt"><slot /></main>
 
     <footer class="fuss">
+      <div class="fuss__streifen" style={`background-image:url(${u('/karte/witzwort.svg')})`} role="img" aria-label="Kartenausschnitt der Marsch um Witzwort"><span class="etikett" aria-hidden="true">Blatt Witzwort · Südrand</span></div>
       <div class="wrap fuss__raster">
         <div>
           <p class="fuss__marke">Wählergemeinschaft Witzwort</p>
-          <p>Seit 1978 unabhängig und parteifrei für unser Dorf. Verein und Fraktion – gemeinsam für Witzwort.</p>
-          <a class="btn btn--linie-hell" href={SITE.instagram.url} target="_blank" rel="noopener">
+          <p>Seit 1978 unabhängig und parteifrei für unser Dorf. Verein und Fraktion, gemeinsam für Witzwort.</p>
+          <a class="btn btn--hell" href={SITE.instagram.url} target="_blank" rel="noopener">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.4" cy="6.6" r="0.6" fill="currentColor"/></svg>
             @{SITE.instagram.name}
           </a>
         </div>
         <div>
-          <h2>Verein</h2>
+          <h2 class="etikett">Verein</h2>
           <p>
             {SITE.verein.name}<br />{SITE.verein.rolle}<br />
             <a href={`tel:${SITE.verein.telefon.replace(/\s/g, '')}`}>{SITE.verein.telefon}</a><br />
@@ -94,14 +94,14 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
           </p>
         </div>
         <div>
-          <h2>Fraktion</h2>
+          <h2 class="etikett">Fraktion</h2>
           <p>
             {SITE.fraktion.name}<br />{SITE.fraktion.rolle}<br />
             <Mail adresse={SITE.fraktion.email} />
           </p>
         </div>
         <div>
-          <h2>Seiten</h2>
+          <h2 class="etikett">Seiten</h2>
           <ul>
             {nav.map((n) => <li><a href={u(n.href)}>{n.label}</a></li>)}
             <li><a href={u('/mitglied-werden/')}>Mitglied werden</a></li>
@@ -110,7 +110,7 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
         </div>
       </div>
       <div class="wrap fuss__unten">
-        <span>© {new Date().getFullYear()} Wählergemeinschaft Witzwort</span>
+        <span>© {new Date().getFullYear()} Wählergemeinschaft Witzwort · Karte © OpenStreetMap-Mitwirkende</span>
         <span><a href={u('/impressum/')}>Impressum</a> · <a href={u('/datenschutz/')}>Datenschutz</a></span>
       </div>
     </footer>
@@ -118,27 +118,28 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
 </html>
 
 <style>
-  .kopf { position: sticky; top: 0; z-index: 50; background: rgb(255 255 255 / 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--linie); }
-  .kopf__innen { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.6rem; }
+  .kopf { position: sticky; top: 0; z-index: 50; background: var(--blatt); border-bottom: var(--linie) solid var(--tinte); }
+  .kopf__innen { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 4.4rem; }
+  @media (max-width: 900px) { .kopf__innen { min-height: 3.9rem; } .marke img { width: 42px; } }
   .marke { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--tinte); }
-  .marke img { width: 52px; height: auto; flex: none; }
-  .marke__text { display: grid; font-family: var(--kopf); line-height: 1.05; letter-spacing: -0.01em; }
-  .marke__text strong { font-size: 1.02rem; font-weight: 700; }
-  .marke__text span { font-size: 1.02rem; font-weight: 500; color: var(--rot); }
+  .marke img { width: 50px; height: auto; flex: none; }
+  .marke__text { font-family: var(--titel); font-weight: 600; font-size: 1.06rem; line-height: 1.1; letter-spacing: -0.01em; }
+  .marke__text b { display: block; font-weight: 800; color: var(--rot); }
 
   .nav ul { list-style: none; margin: 0; padding: 0; }
-  .nav a:not(.btn) { color: var(--tinte); text-decoration: none; font-weight: 600; font-size: 0.98rem; padding: 0.4rem 0; border-bottom: 2px solid transparent; }
-  .nav a:not(.btn):hover, .nav a[aria-current='page'] { border-bottom-color: var(--rot); }
-  .nav .btn { padding: 0.6em 1.1em; font-size: 0.95rem; }
-  .nav__breit { display: flex; align-items: center; gap: 1.6rem; }
+  .nav a:not(.btn) { color: var(--tinte); text-decoration: none; font-weight: 600; font-size: 1rem; padding: 0.35rem 0; border-bottom: 3px solid transparent; transition: border-color 0.18s var(--aus); }
+  .nav a:not(.btn):hover { border-bottom-color: var(--tinte); }
+  .nav a[aria-current='page'] { border-bottom-color: var(--rot); }
+  .nav .btn { padding: 0.62em 1.05em; font-size: 0.97rem; }
+  .nav__breit { display: flex; align-items: center; gap: 1.7rem; }
   .nav__mobil { display: none; }
 
   @media (max-width: 900px) {
     .nav__breit { display: none; }
     .nav__mobil { display: block; }
-    .nav__mobil summary { list-style: none; cursor: pointer; width: 2.8rem; height: 2.8rem; display: grid; place-items: center; border-radius: 10px; border: 1px solid var(--linie); }
+    .nav__mobil summary { list-style: none; cursor: pointer; width: 2.9rem; height: 2.9rem; display: grid; place-items: center; border: var(--linie) solid var(--tinte); }
     .nav__mobil summary::-webkit-details-marker { display: none; }
-    .burger, .burger::before, .burger::after { display: block; width: 1.25rem; height: 2px; background: var(--tinte); border-radius: 2px; transition: transform 0.2s; }
+    .burger, .burger::before, .burger::after { display: block; width: 1.25rem; height: 2px; background: var(--tinte); transition: transform 0.2s var(--aus); }
     .burger { position: relative; }
     .burger::before, .burger::after { content: ''; position: absolute; left: 0; }
     .burger::before { top: -6px; }
@@ -146,20 +147,25 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
     .nav__mobil[open] .burger { background: transparent; }
     .nav__mobil[open] .burger::before { transform: translateY(6px) rotate(45deg); }
     .nav__mobil[open] .burger::after { transform: translateY(-6px) rotate(-45deg); }
-    .nav__mobil ul { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border-bottom: 1px solid var(--linie); padding: 0.5rem 1.25rem 1.5rem; display: grid; gap: 0.2rem; box-shadow: var(--schatten); }
-    .nav__mobil li a:not(.btn) { display: block; padding: 0.8rem 0; font-size: 1.1rem; border-bottom: 1px solid var(--linie); }
-    .nav__mobil .btn { margin-top: 1rem; justify-content: center; width: 100%; padding: 0.85em; }
+    .nav__mobil ul { position: absolute; left: 0; right: 0; top: 100%; background: var(--blatt); border-bottom: var(--linie) solid var(--tinte); padding: 0.4rem 1.25rem 1.5rem; display: grid; }
+    .nav__mobil li a:not(.btn) { display: flex; align-items: center; gap: 0.8rem; padding: 0.95rem 0; font-family: var(--titel); font-size: 1.25rem; font-weight: 700; border-bottom: 1px solid var(--tinte); }
+    .nav__mobil .btn { margin-top: 1.2rem; justify-content: center; width: 100%; padding: 0.9em; }
   }
 
-  .fuss { background: var(--tinte); color: #b9bdc6; padding-top: clamp(3rem, 6vw, 4.5rem); font-size: 0.98rem; }
-  .fuss a { color: #fff; }
-  .fuss a:not(.btn) { text-decoration-color: rgb(255 255 255 / 0.35); }
-  .fuss__raster { display: grid; gap: 2.5rem; grid-template-columns: 1.6fr 1fr 1fr 1fr; padding-bottom: 3rem; }
-  .fuss__marke { font-family: var(--kopf); font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 0.6rem; letter-spacing: -0.01em; }
-  .fuss h2 { font-family: var(--lauf); font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase; color: #8a8f99; margin-bottom: 0.9rem; font-weight: 650; }
+  .fuss { background: var(--forst); color: #c5d3b3; font-size: 0.98rem; }
+  .fuss__streifen { position: relative; height: clamp(110px, 15vw, 180px); background-size: 1700px auto; background-position: 62% 47%; border-block: var(--linie) solid var(--tinte); }
+  .fuss__streifen::before { content: ''; position: absolute; inset: 0 12px 12px; border: var(--linie) solid var(--tinte); border-top: 0; }
+  .fuss__streifen::after { content: ''; position: absolute; inset: 0 17px 17px; border: 1px solid var(--tinte); border-top: 0; }
+  .fuss__streifen span { position: absolute; left: 30px; bottom: 28px; background: var(--marsch); color: var(--tinte); padding: 0.15em 0.5em; }
+  .fuss :global(a) { color: #fff; }
+  .fuss :global(a:not(.btn)) { text-decoration-color: rgb(255 255 255 / 0.4); }
+  .fuss :global(a:not(.btn):hover) { color: #fff; text-decoration-color: #fff; }
+  .fuss__raster { display: grid; gap: 2.5rem; grid-template-columns: 1.6fr 1fr 1fr 1fr; padding-block: clamp(2.8rem, 6vw, 4.2rem) 3rem; }
+  .fuss__marke { font-family: var(--titel); font-size: 1.45rem; font-weight: 800; color: #fff; margin-bottom: 0.6rem; letter-spacing: -0.01em; line-height: 1.15; }
+  .fuss h2 { font-family: var(--lauf); color: #9fb58a; margin-bottom: 0.9rem; }
   .fuss ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.35rem; }
-  .fuss .btn { margin-top: 0.4rem; font-size: 0.95rem; padding: 0.6em 1.1em; }
-  .fuss__unten { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; justify-content: space-between; padding-block: 1.4rem; border-top: 1px solid rgb(255 255 255 / 0.12); font-size: 0.9rem; }
+  .fuss .btn { margin-top: 0.5rem; font-size: 0.95rem; padding: 0.62em 1.05em; }
+  .fuss__unten { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; justify-content: space-between; padding-block: 1.3rem; border-top: 1px solid rgb(255 255 255 / 0.22); font-size: 0.9rem; }
   @media (max-width: 820px) { .fuss__raster { grid-template-columns: 1fr 1fr; } .fuss__raster > :first-child { grid-column: 1 / -1; } }
   @media (max-width: 460px) { .fuss__raster { grid-template-columns: 1fr; } }
 </style>

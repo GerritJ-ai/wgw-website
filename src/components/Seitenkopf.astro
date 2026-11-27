@@ -1,12 +1,30 @@
 ---
-interface Props { eyebrow?: string; title: string; lead?: string }
-const { eyebrow, title, lead } = Astro.props;
+// Kopf der Unterseiten: Titelfeld auf einem Ausschnitt des Kartenblatts.
+import { u } from '../lib/site';
+interface Props {
+  title: string;
+  lead?: string;
+  sig?: 'aktuelles' | 'verein' | 'fraktion' | 'programm';
+  /** Ausschnitt der Karte als background-position, z. B. "40% 60%" */
+  ausschnitt?: string;
+}
+const { title, lead, sig, ausschnitt = '30% 30%' } = Astro.props;
 ---
-<section class="seitenkopf">
+
+<section class="seitenkopf" style={`--karte:url(${u('/karte/witzwort.svg')});--pos:${ausschnitt}`}>
   <div class="wrap">
-    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-    <h1>{title}</h1>
-    {lead && <p class="lead">{lead}</p>}
-    <slot />
+    <div class="seitenkopf__feld feld">
+      <h1>{sig && <i class={`sig sig--${sig}`} aria-hidden="true" />}{title}</h1>
+      {lead && <p class="lead">{lead}</p>}
+      <slot />
+    </div>
   </div>
 </section>
+
+<style>
+  .seitenkopf { background: var(--marsch) var(--karte) var(--pos) / 2100px auto; border-bottom: var(--linie) solid var(--tinte); padding-block: clamp(2.5rem, 7vw, 5rem); }
+  .seitenkopf__feld { max-width: 46rem; padding: clamp(1.5rem, 3.5vw, 2.6rem); }
+  h1 { font-size: clamp(2rem, 4.6vw, 3.4rem); margin-bottom: 0.35em; }
+  h1 .sig { font-size: 0.5em; margin-right: 0.55em; vertical-align: 0.12em; }
+  .lead { margin: 0; }
+</style>

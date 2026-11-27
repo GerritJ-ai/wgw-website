@@ -13,7 +13,7 @@ const jahre = [...new Set(berichte.map((b) => b.data.date.getUTCFullYear()))];
 ---
 
 <Base title="Aktuelles" description="Neuigkeiten der Wählergemeinschaft Witzwort von Instagram sowie Berichte aus Verein und Fraktion.">
-  <Seitenkopf eyebrow="Aktuelles" title="Neues von der WGW" lead="Aktuelle Termine, Fotos und kurze Berichte veröffentlichen wir auf Instagram. Ausführliche Rückblicke aus den vergangenen Jahren findest Du darunter im Archiv." />
+  <Seitenkopf sig="aktuelles" ausschnitt="30% 20%" title="Neues von der WGW" lead="Aktuelle Termine, Fotos und kurze Berichte veröffentlichen wir auf Instagram. Ausführliche Rückblicke aus den vergangenen Jahren findest Du darunter im Archiv." />
 
   <section class="abschnitt">
     <div class="wrap">
@@ -25,11 +25,10 @@ const jahre = [...new Set(berichte.map((b) => b.data.date.getUTCFullYear()))];
     </div>
   </section>
 
-  <section class="abschnitt abschnitt--sand">
+  <section class="abschnitt abschnitt--marsch">
     <div class="wrap">
       <div class="kopfzeile">
         <div>
-          <p class="eyebrow">Archiv</p>
           <h2>Berichte aus Verein und Fraktion</h2>
         </div>
         <nav class="jahre" aria-label="Jahre">
@@ -50,8 +49,8 @@ const jahre = [...new Set(berichte.map((b) => b.data.date.getUTCFullYear()))];
 
 <style>
   .jahre { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-  .jahre a { text-decoration: none; font-weight: 600; font-size: 0.92rem; padding: 0.35em 0.9em; border-radius: 999px; background: #fff; border: 1px solid var(--linie); color: var(--tinte); }
-  .jahre a:hover { border-color: var(--rot); color: var(--rot-dunkel); }
+  .jahre a { text-decoration: none; font-weight: 600; font-size: 0.92rem; padding: 0.35em 0.9em; background: var(--blatt); border: var(--linie) solid var(--tinte); color: var(--tinte); }
+  .jahre a:hover { background: var(--tinte); color: #fff; }
   .jahr { scroll-margin-top: 6rem; margin-top: 3rem; }
-  .jahr h3 { font-size: 2rem; color: var(--rot); margin-bottom: 1.2rem; }
+  .jahr h3 { font-size: 2.2rem; margin-bottom: 1.2rem; }
 </style>

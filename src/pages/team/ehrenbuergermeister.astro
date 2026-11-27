@@ -15,13 +15,13 @@ const aemter = [
 ---
 
 <Base title="Unser Ehrenbürgermeister Willi Berendt" description="Willi Berendt – Gründungsmitglied der WGW, Bürgermeister von Witzwort 1986 bis 2018 und Träger des Bundesverdienstkreuzes.">
-  <Seitenkopf eyebrow="Unser Ehrenbürgermeister" title="Willi Berendt" lead="Gründungsmitglied der WGW und mehr als 30 Jahre Bürgermeister von Witzwort – eine Amtszeit, die bisher kein anderer erreicht hat." />
+  <Seitenkopf ausschnitt="20% 60%" title="Unser Ehrenbürgermeister Willi Berendt" lead="Gründungsmitglied der WGW und mehr als 30 Jahre Bürgermeister von Witzwort – eine Amtszeit, die bisher kein anderer erreicht hat." />
 
   <section class="abschnitt">
     <div class="wrap profil">
       <aside>
         <Image src={portrait} alt="Portrait von Willi Berendt" width={520} height={690} fit="cover" position="top" />
-        <ul class="liste-haken">
+        <ul class="liste-punkt">
           <li>Seit 1978 Mitglied in der WGW (Gründungsmitglied)</li>
           <li>Ehrenbürger der Gemeinde Witzwort</li>
           <li>Träger des Bundesverdienstkreuzes</li>
@@ -54,12 +54,12 @@ const aemter = [
 <style>
   .profil { display: grid; grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); gap: 2.5rem clamp(2rem, 6vw, 5rem); align-items: start; }
   @media (max-width: 860px) { .profil { grid-template-columns: 1fr; } }
-  aside :global(img) { border-radius: var(--radius); width: 100%; margin-bottom: 1.6rem; }
+  aside :global(img) { border: var(--linie) solid var(--tinte); width: 100%; margin-bottom: 1.6rem; }
   .klein { font-size: 1.2rem; margin-top: 2rem; }
   dl { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1rem; font-size: 0.95rem; margin: 0; }
-  dt { color: var(--grau); white-space: nowrap; }
+  dt { color: var(--tinte-weich); white-space: nowrap; }
   dd { margin: 0; }
   figure { margin: 1.6rem 0; }
   figure :global(img) { margin: 0; }
-  figcaption { font-size: 0.85rem; color: var(--grau); margin-top: 0.5rem; }
+  figcaption { font-size: 0.85rem; color: var(--tinte-weich); margin-top: 0.5rem; }
 </style>
