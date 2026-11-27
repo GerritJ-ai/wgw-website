@@ -271,13 +271,20 @@ Gedruckte Stempel: eckig, gerahmt, ohne Verläufe.
 - **Fuß:** Kartenstreifen zwischen zwei Tintenlinien, darunter Forstgrün mit vier Spalten (Wortmarke mit Instagram-Schaltfläche, Verein, Fraktion, Seiten), Spaltentitel als Etikett.
 
 ### Kartenblatt (Signature Component)
-Das Kartenblatt ist die erste Ansicht der Startseite. Die Karte liegt als SVG unter einer zweiten SVG-Ebene mit Leitlinien (1,25 px Tinte, nicht skalierend) von jedem Ortspunkt zu seinem Etikett. Orte der WGW tragen rote Marken mit Tintenrahmen und weißer Schrift (schmale Grotesk 700); sie sind Links und werden beim Hover tintenschwarz. Neutrale Orte tragen Etiketten auf Marschgrün. Die Zeichenerklärung im Feld unten rechts ist die Hauptnavigation: Zeigt man auf Verein, Fraktion oder Programm, treten alle anderen Orte auf 22 % Deckkraft zurück. Beim Laden setzen sich die Marken nacheinander aufs Blatt (0,6 s, je 0,11 s versetzt, aus 55 % Größe), nur wenn keine reduzierte Bewegung gewünscht ist.
+Das Kartenblatt ist die erste Ansicht der Startseite. Die Karte liegt als SVG unter einer zweiten SVG-Ebene mit Leitlinien (1,25 px Tinte, nicht skalierend) von jedem Ortspunkt zu seinem Etikett. Orte der WGW tragen rote Marken mit Tintenrahmen und weißer Schrift (schmale Grotesk 700); sie sind Links und werden beim Hover tintenschwarz. Neutrale Orte tragen Etiketten auf Marschgrün. Die Zeichenerklärung im Feld unten rechts ist die Hauptnavigation: Zeigt man auf Verein, Fraktion oder Programm, treten alle anderen Orte auf 22 % Deckkraft zurück. Beim Laden wird das Blatt aufgenommen (siehe Bewegung), nur wenn keine reduzierte Bewegung gewünscht ist.
 
 ### Seitenkopf
 Jede Unterseite beginnt mit einem Ausschnitt des Kartenblatts (2100 px breit, Ausschnitt pro Seite wählbar) auf Marschgrün, darauf ein Feld bis 46 rem mit Titel, optionaler Bereichssignatur und Lead.
 
 ### Bewegung
-Eine Kurve für alles: `cubic-bezier(0.16, 1, 0.3, 1)`. Zustandswechsel 0,18 bis 0,25 s, Bildzoom 0,6 s. Linien werden gezeichnet, nichts schwebt ein. Bei reduzierter Bewegung werden alle Übergänge und Animationen abgeschaltet.
+Eine Kurve für Ankünfte: `cubic-bezier(0.16, 1, 0.3, 1)`. Zustandswechsel 0,18 bis 0,25 s, Bildzoom 0,6 s. Bewegung zeichnet, setzt oder legt auf; nichts hüpft.
+
+- **Aufnahme des Blatts (Startseite, einmal beim Laden, rund 2 s):** Die Karte liegt in vier Ebenen (`public/karte/grund|wasser|wege|haeuser.svg`). Der Grund steht sofort; Gräben, Wege und Häuser werden nacheinander als wachsender Kreis vom Dorfkern aus freigelegt (`clip-path: circle`, 1,5 / 1,3 / 1 s, Start 0,1 / 0,5 / 0,95 s). Danach erscheint der Ortsname, die Leitlinien werden gezogen, die Punkte gestempelt (Maßstab 0 auf 1), die Etiketten von der Linie weg aufgedeckt, die Maßstabsleiste misst sich aus.
+- **Zeichenerklärung:** Der Eintrag unter dem Zeiger lässt fremde Orte auf 22 % zurücktreten und vergrößert die eigenen Punkte auf 155 %.
+- **Scroll-Aufbau (alle Seiten):** Trennlinien werden von links gezogen (0,9 s), Abschnittsüberschriften tauchen aus ihrer Zeile auf, Fotos, Karten und Felder werden wie lose Bögen aufgelegt (leicht gedreht, 0,75 s, Geschwister je 80 ms versetzt, höchstens fünf Stufen), Listenzeilen rücken von links ein. Greift nur mit `html.bewegt`, das ein kleines Skript in `Base.astro` setzt; ohne Skript bleibt alles sichtbar.
+- **Mitwandern:** Die Karte der Startseite bleibt beim Scrollen bis 90 px zurück, die Kartenausschnitte in Seitenkopf und Fuß verschieben sich um wenige Prozent (CSS Scroll-Timeline, nur wo der Browser sie kann).
+- **Seitenwechsel:** Cross-Document View Transitions. Kopfzeile und Blattrand (`.blattrand`, fest stehend) bleiben stehen, die alte Seite wird abgehoben (0,22 s), die neue von oben aufgelegt (0,5 s). Browser ohne Unterstützung wechseln ohne Übergang.
+- **Reduzierte Bewegung:** Aufnahme, Scroll-Aufbau, Mitwandern und Seitenübergänge entfallen vollständig; Farbwechsel bei Hover und Fokus bleiben.
 
 ## Do's and Don'ts
 

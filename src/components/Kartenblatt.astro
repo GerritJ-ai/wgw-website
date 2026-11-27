@@ -46,7 +46,8 @@ const massstab = (0.5 / karte.breiteKm) * 100; // 500 m in Prozent der Blattbrei
 <section class="blatt" style={`--m500:${massstab.toFixed(3)}`}>
   <div class="blatt__feld">
     <div class="karte">
-      <img src={u('/karte/witzwort.svg')} alt="Karte der Gemeinde Witzwort mit Gräben, Wegen, Höfen und Bahnlinie" width={karte.breite} height={karte.hoehe} fetchpriority="high" />
+      <img class="ebene ebene--grund" src={u('/karte/grund.svg')} alt="Karte der Gemeinde Witzwort mit Gräben, Wegen, Höfen und Bahnlinie" width={karte.breite} height={karte.hoehe} fetchpriority="high" />
+      {['wasser', 'wege', 'haeuser'].map((e) => <img class={`ebene ebene--${e}`} src={u(`/karte/${e}.svg`)} alt="" width={karte.breite} height={karte.hoehe} />)}
       <svg class="karte__linien" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         {[...orte, ...marken].map((o, i) => <line x1={o.x} y1={o.y} x2={o.lx} y2={o.ly} pathLength="1" style={`--i:${i}`} />)}
       </svg>
@@ -123,7 +124,7 @@ const massstab = (0.5 / karte.breiteKm) * 100; // 500 m in Prozent der Blattbrei
   }
   .blatt__feld { position: absolute; inset: 0 0 auto 0; height: var(--hh); overflow: hidden; z-index: -1; }
   .karte { position: absolute; left: var(--tx); top: var(--ty); width: var(--wc); aspect-ratio: 2000 / 1680; transform: translate(-68.5%, -51%); }
-  .karte img { width: 100%; height: 100%; }
+  .karte .ebene { position: absolute; inset: 0; width: 100%; height: 100%; }
   .karte__linien { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .karte__linien line { stroke: var(--tinte); stroke-width: 0.085; stroke-dasharray: 1; }
 
@@ -154,10 +155,46 @@ const massstab = (0.5 / karte.breiteKm) * 100; // 500 m in Prozent der Blattbrei
   .blatt:has(.legende a[data-g='fraktion']:is(:hover, :focus-visible)) .karte__orte li:not([data-g~='fraktion']),
   .blatt:has(.legende a[data-g='programm']:is(:hover, :focus-visible)) .karte__orte li:not([data-g~='programm']) { opacity: 0.22; }
 
+  /* Die Aufnahme des Blatts: vom Dorf aus werden erst die Gräben, dann die Wege, dann die Häuser gezeichnet,
+     zuletzt setzen sich die Marken. Einmal beim Laden, rund zwei Sekunden. */
   @media (prefers-reduced-motion: no-preference) {
-    /* Linien werden gezeichnet; Marken und Etiketten stehen von Anfang an */
-    .karte__linien line { animation: ziehen 0.55s var(--aus) backwards; animation-delay: calc(0.1s + var(--i) * 0.05s); }
+    .ebene--wasser { animation: aufnehmen 1.5s cubic-bezier(0.3, 0.6, 0.3, 1) 0.1s backwards; }
+    .ebene--wege { animation: aufnehmen 1.3s cubic-bezier(0.3, 0.6, 0.3, 1) 0.5s backwards; }
+    .ebene--haeuser { animation: aufnehmen 1s cubic-bezier(0.3, 0.6, 0.3, 1) 0.95s backwards; }
+    @keyframes aufnehmen { from { clip-path: circle(0% at 68.5% 51%); } to { clip-path: circle(125% at 68.5% 51%); } }
+
+    .karte__ort, .karte__wasser { animation: beschriften 0.7s var(--aus) 1.2s backwards; }
+    .karte__name { animation: beschriften 0.5s var(--aus) 1.7s backwards; }
+    @keyframes beschriften { from { opacity: 0; letter-spacing: 0.6em; } }
+    .karte__name { animation-name: einblenden; }
+    .karte__wasser { animation-name: einblenden; }
+    @keyframes einblenden { from { opacity: 0; } }
+
+    .karte__linien line { animation: ziehen 0.5s var(--aus) backwards; animation-delay: calc(1.45s + var(--i) * 0.07s); }
     @keyframes ziehen { from { stroke-dashoffset: 1; } }
+    .karte__orte .punkt { animation: stempeln 0.45s var(--aus) backwards; animation-delay: calc(1.4s + var(--i) * 0.07s); }
+    @keyframes stempeln { from { scale: 0; } }
+    .karte__orte .karte__marke { animation: etikettieren 0.5s var(--aus) backwards; animation-delay: calc(1.7s + var(--i) * 0.07s); }
+    @keyframes etikettieren { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+    .karte__orte .karte__marke.ist-l { animation-name: etikettieren-l; }
+    @keyframes etikettieren-l { from { clip-path: inset(0 0 0 100%); } to { clip-path: inset(0 0 0 0); } }
+
+    .massstab i { animation: messen 0.9s var(--aus) 1.6s backwards; transform-origin: left; }
+    @keyframes messen { from { transform: scaleX(0); } }
+
+    /* Hervorgehobene Orte antworten auf die Zeichenerklärung */
+    .karte__orte .punkt { transition: scale 0.3s var(--aus); }
+    .blatt:has(.legende a[data-g='verein']:is(:hover, :focus-visible)) .karte__orte li[data-g~='verein'] .punkt,
+    .blatt:has(.legende a[data-g='fraktion']:is(:hover, :focus-visible)) .karte__orte li[data-g~='fraktion'] .punkt,
+    .blatt:has(.legende a[data-g='programm']:is(:hover, :focus-visible)) .karte__orte li[data-g~='programm'] .punkt { scale: 1.55; }
+  }
+
+  /* Beim Scrollen bleibt die Karte etwas zurück, als läge das Titelfeld lose darauf */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: scroll()) {
+      .karte { animation: zurueckbleiben linear both; animation-timeline: scroll(root block); animation-range: 0 900px; }
+      @keyframes zurueckbleiben { to { translate: 0 90px; } }
+    }
   }
 
   .blatt__rand { position: absolute; inset: 12px 12px auto 12px; height: calc(var(--hh) - 12px); border: var(--linie) solid var(--tinte); border-bottom: 0; pointer-events: none; }

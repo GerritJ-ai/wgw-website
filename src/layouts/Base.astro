@@ -43,6 +43,10 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={og} />
+    <script is:inline>
+      // Scroll-Aufbau nur, wenn Bewegung erwünscht ist und der Browser es kann; sonst bleibt alles sichtbar.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) document.documentElement.classList.add('bewegt');
+    </script>
   </head>
   <body>
     <a class="skip" href="#inhalt">Zum Inhalt springen</a>
@@ -72,6 +76,7 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
       </div>
     </header>
 
+    <div class="blattrand" aria-hidden="true"></div>
     <main id="inhalt"><slot /></main>
 
     <footer class="fuss">
@@ -114,6 +119,35 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
         <span><a href={u('/impressum/')}>Impressum</a> · <a href={u('/datenschutz/')}>Datenschutz</a></span>
       </div>
     </footer>
+    <script is:inline>
+      (() => {
+        if (!document.documentElement.classList.contains('bewegt')) return;
+        const arten = [
+          ['linie', '.kopfzeile, .bereiche, .themen'],
+          ['titel', '.abschnitt h2'],
+          ['bogen', '.bk, .pk, .ig > li, .abschnitt .feld, .abschnitt figure, .seiten a, .kap__kopf img, .zwei > img'],
+          ['zeile', '.themen li, .bereiche article, .liste-punkt li, .schritte li, .ergebnis div, .jahr > h3, .portraits li'],
+        ];
+        const alle = [];
+        for (const [art, sel] of arten) {
+          document.querySelectorAll(sel).forEach((el) => {
+            if (el.dataset.auf || el.closest('.blatt, .seitenkopf, .fuss')) return;
+            el.dataset.auf = art;
+            alle.push(el);
+          });
+        }
+        const zeigen = (el, n) => { el.style.setProperty('--n', n); el.classList.add('da'); };
+        const io = new IntersectionObserver((eintraege) => {
+          let n = 0;
+          for (const e of eintraege) {
+            if (!e.isIntersecting && e.boundingClientRect.top > 0) continue;
+            zeigen(e.target, e.isIntersecting ? Math.min(n++, 5) : 0);
+            io.unobserve(e.target);
+          }
+        }, { rootMargin: '0px 0px -7% 0px', threshold: 0.08 });
+        alle.forEach((el) => io.observe(el));
+      })();
+    </script>
   </body>
 </html>
 
@@ -153,7 +187,7 @@ const aktiv = (href: string) => pfad.startsWith(u(href));
   }
 
   .fuss { background: var(--forst); color: #c5d3b3; font-size: 0.98rem; }
-  .fuss__streifen { position: relative; height: clamp(110px, 15vw, 180px); background-size: 1700px auto; background-position: 62% 47%; border-block: var(--linie) solid var(--tinte); }
+  .fuss__streifen { position: relative; height: clamp(110px, 15vw, 180px); --py: 47%; background-size: 1700px auto; background-position: 62% 47%; border-block: var(--linie) solid var(--tinte); }
   .fuss__streifen::before { content: ''; position: absolute; inset: 0 12px 12px; border: var(--linie) solid var(--tinte); border-top: 0; }
   .fuss__streifen::after { content: ''; position: absolute; inset: 0 17px 17px; border: 1px solid var(--tinte); border-top: 0; }
   .fuss__streifen span { position: absolute; left: 30px; bottom: 28px; background: var(--marsch); color: var(--tinte); padding: 0.15em 0.5em; }

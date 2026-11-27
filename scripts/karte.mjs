@@ -103,6 +103,18 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" fil
 await fs.mkdir(path.join(ROOT, 'public/karte'), { recursive: true });
 await fs.writeFile(path.join(ROOT, 'public/karte/witzwort.svg'), svg);
 
+// Dieselbe Karte in vier Ebenen, damit die Startseite sie nacheinander zeichnen kann
+const kopf = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" fill="none" stroke-linecap="round" stroke-linejoin="round">`;
+const ebenen = {
+  grund: `<rect width="${W}" height="${H}" fill="#dfe8cf"/><path d="${L.wald}" fill="#b9cf9f"/><path d="${L.ort}" fill="#eef1e0"/>`,
+  wasser: `<path d="${L.wasser}" fill="#a9c9dd" stroke="#2f6f9f" stroke-width="1"/><path d="${L.graben}" stroke="#2f6f9f" stroke-width="1" opacity=".75"/><path d="${L.siel}" stroke="#2f6f9f" stroke-width="2.2"/><path d="${L.fluss}" stroke="#2f6f9f" stroke-width="5"/>`,
+  wege: `<path d="${L.pfad}" stroke="#1c2321" stroke-width="1" stroke-dasharray="1 4"/><path d="${L.feldweg}" stroke="#1c2321" stroke-width="1.2" stroke-dasharray="7 4"/><path d="${L.weg}" stroke="#1c2321" stroke-width="4.2"/><path d="${L.strasse}" stroke="#1c2321" stroke-width="6.4"/><path d="${L.haupt}" stroke="#1c2321" stroke-width="8.4"/><path d="${L.weg}" stroke="#f8f7f1" stroke-width="2.6"/><path d="${L.strasse}" stroke="#f8f7f1" stroke-width="4.6"/><path d="${L.haupt}" stroke="#c4161c" stroke-width="6"/><path d="${L.bahn}" stroke="#1c2321" stroke-width="5"/><path d="${L.bahn}" stroke="#f8f7f1" stroke-width="3" stroke-dasharray="14 14" stroke-linecap="butt"/>`,
+  haeuser: `<path d="${L.haus}" fill="#1c2321"/>`,
+};
+for (const [name, inhalt] of Object.entries(ebenen)) {
+  await fs.writeFile(path.join(ROOT, `public/karte/${name}.svg`), kopf + inhalt + '</svg>');
+}
+
 // Benannte Orte als Prozent-Positionen auf dem Blatt
 const orte = [];
 for (const e of daten.elements) {

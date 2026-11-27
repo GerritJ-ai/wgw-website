@@ -64,15 +64,15 @@ p { margin: 0 0 1em; }
 .abschnitt { position: relative; padding-block: clamp(3.75rem, 8vw, 6.5rem); }
 /* Der Blattrand läuft als Doppellinie über die ganze Seite, mit Randstrichen an jedem Abschnitt */
 main { position: relative; }
-main::before, main::after { content: ''; position: absolute; top: 0; bottom: 0; border-inline: 1px solid var(--tinte); pointer-events: none; z-index: 2; }
-main::before { left: 12px; right: 12px; border-inline-width: var(--linie); }
-main::after { left: 17px; right: 17px; }
+.blattrand { position: fixed; inset: 0 12px; z-index: 2; pointer-events: none; border-inline: var(--linie) solid var(--tinte); view-transition-name: blattrand; }
+.blattrand::after { content: ''; position: absolute; inset: 0 3.5px; border-inline: 1px solid var(--tinte); }
+.abschnitt--forst, footer.fuss { position: relative; z-index: 3; }
 .abschnitt::before { content: ''; position: absolute; top: 0; left: 12px; right: 12px; height: var(--linie); pointer-events: none; background: linear-gradient(90deg, var(--tinte) 0 22px, transparent 22px calc(100% - 22px), var(--tinte) calc(100% - 22px)); }
 .abschnitt--forst::before { background: none; }
 /* Auf Forstgrün läuft der Blattrand hell weiter und schließt am Kartenstreifen des Fußes */
 .abschnitt--forst::after { content: ''; position: absolute; top: 0; bottom: 0; left: 12px; right: 12px; z-index: 3; pointer-events: none; border-inline: var(--linie) solid #dbe5cc; box-shadow: inset 5px 0 0 -4px #dbe5cc, inset -5px 0 0 -4px #dbe5cc; }
 @media (max-width: 860px) { .abschnitt--forst::after { left: 8px; right: 8px; box-shadow: inset 4px 0 0 -3px #dbe5cc, inset -4px 0 0 -3px #dbe5cc; } }
-@media (max-width: 860px) { main::before { left: 8px; right: 8px; } main::after { left: 12px; right: 12px; } .abschnitt::before { left: 8px; right: 8px; } }
+@media (max-width: 860px) { .blattrand { inset: 0 8px; } .blattrand::after { inset: 0 2.5px; } .abschnitt::before { left: 8px; right: 8px; } }
 .abschnitt--marsch { background: var(--marsch); }
 .abschnitt--forst { background: var(--forst); color: #dbe5cc; }
 .abschnitt--forst h2, .abschnitt--forst h3 { color: #fff; }
@@ -149,7 +149,52 @@ main::after { left: 17px; right: 17px; }
 .skip { position: absolute; left: 1rem; top: -4rem; background: var(--tinte); color: #fff; padding: 0.6rem 1rem; z-index: 100; }
 .skip:focus { top: 1rem; color: #fff; }
 
+/* ---------- Bewegung ----------
+   Scroll-Aufbau: Linien werden gezogen, Überschriften tauchen aus ihrer Zeile auf, Fotos und Felder
+   werden wie lose Bögen aufs Blatt gelegt. Greift nur mit html.bewegt (gesetzt per Skript). */
+.kopfzeile { position: relative; }
+html.bewegt .kopfzeile { border-bottom-color: transparent; }
+html.bewegt .kopfzeile::after { content: ''; position: absolute; left: 0; right: 0; bottom: calc(var(--linie) * -1); height: var(--linie); background: var(--tinte); transform: scaleX(0); transform-origin: left; transition: transform 0.9s var(--aus); }
+html.bewegt .kopfzeile.da::after { transform: none; }
+html.bewegt .bereiche[data-auf], html.bewegt .themen[data-auf] { border-top-color: transparent; background: linear-gradient(var(--tinte), var(--tinte)) top left / 0% var(--linie) no-repeat; transition: background-size 0.9s var(--aus); }
+html.bewegt .bereiche.da, html.bewegt .themen.da { background-size: 100% var(--linie); }
+
+html.bewegt [data-auf='titel'] { clip-path: inset(0 0 100% 0); translate: 0 0.5em; transition: clip-path 0.7s var(--aus), translate 0.7s var(--aus); }
+html.bewegt [data-auf='titel'].da { clip-path: inset(-0.2em -0.1em -0.3em -0.1em); translate: none; }
+
+html.bewegt [data-auf='bogen'] { opacity: 0; translate: 0 2.2rem; rotate: -1.6deg; transition: opacity 0.45s ease-out, translate 0.75s var(--aus), rotate 0.75s var(--aus); transition-delay: calc(var(--n, 0) * 80ms); }
+html.bewegt [data-auf='bogen']:nth-child(even) { rotate: 1.4deg; }
+html.bewegt [data-auf='bogen'].da { opacity: 1; translate: none; rotate: none; }
+
+html.bewegt [data-auf='zeile'] { opacity: 0; translate: -1.1rem 0; transition: opacity 0.4s ease-out, translate 0.6s var(--aus); transition-delay: calc(var(--n, 0) * 70ms); }
+html.bewegt [data-auf='zeile'].da { opacity: 1; translate: none; }
+
+/* Kartenausschnitte in Seitenkopf und Fuß wandern beim Scrollen ein Stück mit */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .seitenkopf, .fuss__streifen { animation: ausschnitt linear both; animation-timeline: view(); }
+    @keyframes ausschnitt { from { background-position-y: calc(var(--py, 40%) - 9%); } to { background-position-y: calc(var(--py, 40%) + 9%); } }
+  }
+}
+
+/* Seitenwechsel: Der Blattrand bleibt stehen, die alte Seite wird abgehoben, die neue von oben aufgelegt */
+@view-transition { navigation: auto; }
+header.kopf { view-transition-name: kopf; }
+main { view-transition-name: seite; }
+::view-transition-group(blattrand), ::view-transition-group(kopf) { animation: none; }
+::view-transition-old(blattrand), ::view-transition-old(kopf) { display: none; }
+::view-transition-new(blattrand), ::view-transition-new(kopf) { animation: none; }
+::view-transition-group(seite) { animation: none; }
+::view-transition-old(seite) { animation: abheben 0.22s ease-in both; }
+::view-transition-new(seite) { animation: auflegen 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+::view-transition-old(root) { animation: abheben 0.22s ease-in both; }
+::view-transition-new(root) { animation: einblenden-seite 0.3s ease-out 0.12s both; }
+@keyframes abheben { to { opacity: 0; translate: 0 -14px; } }
+@keyframes auflegen { from { clip-path: inset(0 0 100% 0); translate: 0 26px; } to { clip-path: inset(0 0 0 0); translate: none; } }
+@keyframes einblenden-seite { from { opacity: 0; } }
+
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
